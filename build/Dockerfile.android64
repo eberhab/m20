@@ -1,0 +1,86 @@
+FROM openjdk:8-jdk
+
+## Run this file:
+# docker build -t libretro/android libretro-build-android/
+# docker run -it -v "./tmp:/ext" libretro/android
+
+# Set Target Versions
+ENV ANDROID_COMPILE_SDK 29
+ENV ANDROID_BUILD_TOOLS 29.0.3
+ENV ANDROID_SDK_TOOLS 6858069
+ENV ANDROID_NDK_VERSION 22.0.7026061
+ENV ANDROID_NDK_LEGACY 16.1.4479499
+
+# Set Paths
+ENV PATH="${PATH}:${PWD}/android-sdk-linux/platform-tools/"
+ENV ANDROID_HOME="${PWD}/android-sdk-linux"
+ENV NDK_ROOT="${PWD}/android-sdk-linux/ndk/${ANDROID_NDK_VERSION}"
+ENV NDK_LEGACY="${PWD}/android-sdk-linux/ndk/${ANDROID_NDK_LEGACY}"
+# https://git.libretro.com/libretro-infrastructure/ci-templates/-/blob/master/android-make.yml
+# .libretro-android-make
+ENV MAKEFILE_PATH="."
+ENV STRIP_CORE_LIB=1
+ENV NUMPROC=$(($(nproc)/5))
+ENV ANDROID_NDK_ROOT="${NDK_ROOT}"
+ENV ANDROID_NDK_LLVM="${NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64"
+ENV ANDROID_NDK_ARM="${NDK_ROOT}/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64"
+ENV ANDROID_NDK_ARM64="${NDK_ROOT}/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64"
+ENV ANDROID_NDK_X86="${NDK_ROOT}/toolchains/x86-4.9/prebuilt/linux-x86_64"
+ENV ANDROID_NDK_X64="${NDK_ROOT}/toolchains/x86_64-4.9/prebuilt/linux-x86_64"
+ENV ANDROID_NDK_CLANG="${NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64"
+# .libretro-android-make-arm64-v8a:
+ENV ANDROID_PLATFORM="android-arm64"
+# https://github.com/libretro/mame/blob/master/.gitlab-ci.yml#L183
+# .core-defs:
+ENV MAKEFILE="Makefile.libretro"
+ENV CORENAME="mame"
+# .android-arm64-v8a
+ENV TARGET="mame"
+ENV SUBTARGET="mess"
+#ENV SOURCES="olivetti/m20.cpp"
+ENV CORENAME="mamemess"
+
+# Install updates and necessary packages for build
+RUN apt-get update -y \
+ && apt-get upgrade -y \
+ && apt-get install -y \
+	cmake \
+	make \
+	bsdmainutils \
+	curl \
+	xxd \
+	autotools-dev \
+	autoconf \
+	automake \
+	pkg-config \
+	perl \
+	git patch \
+	gcc g++ \
+	libtool \
+	python3 \
+	python3-pip \
+	ruby-full \
+ && gem install rake --no-document \
+ && gem install fastlane --no-document
+
+# Install Android SDK and components necessary for libretro
+RUN wget -q -O android-sdk.zip https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_SDK_TOOLS}_latest.zip \
+ && unzip -d android-sdk-linux android-sdk.zip \
+ && rm -f android-sdk.zip \
+ && mkdir -p ~/.android/ && touch ~/.android/repositories.cfg \
+ && mkdir android-sdk-linux/cmdline-tools/latest \
+ && find android-sdk-linux/cmdline-tools -maxdepth 1 -mindepth 1 -not -name latest -print0 | xargs -0 mv -t android-sdk-linux/cmdline-tools/latest/ \
+ && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" \
+ && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "platform-tools" \
+ && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" \
+ && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "ndk;${ANDROID_NDK_VERSION}" \
+ && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "ndk;${ANDROID_NDK_LEGACY}" \
+ && yes | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager --licenses
+
+RUN git clone https://github.com/libretro/mame.git && cd mame && mkdir -p /ext \
+  && make -C ${MAKEFILE_PATH} -f ${MAKEFILE} -j${NUMPROC} platform=${ANDROID_PLATFORM} \
+  && if [ -f ${SUBTARGET}_libretro_android.so ]; then mv ${SUBTARGET}_libretro_android.so ${CORENAME}_libretro_android.so; fi \
+  && if [ ! -f ${CORENAME}_libretro_android.so ]; then mv ${MAKEFILE_PATH}/${CORENAME}_libretro_android.so ${CORENAME}_libretro_android.so; fi \
+  && if [ $STRIP_CORE_LIB -eq 1 ]; then ${ANDROID_NDK_LLVM}/bin/llvm-strip ${CORENAME}_libretro_android.so; fi \
+  && mv ${CORENAME}_libretro_android.so /ext/
+

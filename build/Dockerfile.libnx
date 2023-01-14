@@ -1,0 +1,47 @@
+FROM devkitpro/devkita64
+
+ARG uid
+ARG branch=develop
+ENV branch=$branch
+
+RUN apt-get update && \
+    apt-get install -y unzip \
+    cmake \
+    make \
+    bsdmainutils \
+    curl \
+    xxd \
+    autotools-dev \
+    autoconf \
+    automake \
+    pkg-config \
+    perl \
+    git patch \
+    gcc g++ \
+    libx11-dev libgl1-mesa-dev \
+    libtool && \
+    dkp-pacman -Syu --noconfirm && \
+    dkp-pacman -S --noconfirm devkitARM switch-mesa switch-glad switch-glfw switch-glm dkp-toolchain-vars && \
+    useradd -d /developer -m developer && \
+    chown -R developer:developer /developer
+
+RUN cd /developer && \
+    wget -q 'https://github.com/Kitware/CMake/releases/download/v3.18.4/cmake-3.18.4-Linux-x86_64.sh' && \
+    bash ./cmake-3.18.4-Linux-x86_64.sh --skip-license --prefix=/usr/local && \
+    rm -f ./cmake-3.18.4-Linux-x86_64.sh
+
+# Temporary custom libnx
+RUN cd /opt/devkitpro && \
+    rm -fr libnx/ && cd /tmp && \
+    git clone https://git.m4xw.net/Switch/RetroArch/libnx.git --branch=deprecated-features --depth=1 && \
+    sed -i 's/-Werror//g' /tmp/libnx/nx/Makefile && cd libnx/ && \
+    make -j20 && make install && cd ../ && rm -fr ./libnx
+
+RUN git clone https://github.com/hrydgard/ppsspp-ffmpeg.git --depth=1 && \
+    cd ppsspp-ffmpeg/ && chmod +x ./switch.sh && \
+    ./switch.sh && cd ../ && rm -fr ppsspp-ffmpeg/
+
+ENV HOME=/developer
+ENV DEVKITPRO=/opt/devkitpro
+ENV DEVKITARM=/opt/devkitpro/devkitARM
+

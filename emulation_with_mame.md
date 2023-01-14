@@ -2,7 +2,7 @@
 
 ## Emulating the M20 with MAME
 
-Since a while, the Multiple Arcade Machine Emulator (MAME) ^[[https://www.mamedev.org/](https://www.mamedev.org/)] has a driver^[[https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp)] for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs^[[https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739)], almost like on the original machine. This article is based on MAME v0.251 on Linux Mint 21 (Jan 11th 2023).
+Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, [almost like on the original machine](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739). This article is based on MAME v0.251 on Linux Mint 21 (Jan 11th 2023).
 
 <p align="center">
   <img src="images/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
@@ -11,7 +11,7 @@ Since a while, the Multiple Arcade Machine Emulator (MAME) ^[[https://www.mamede
 
 ### Running M20 floppy images
 
-After installing MAME, one needs to separately download the M20's ROM contents, e.g. _m20.zip_^[[https://wowroms.com/en/roms/mame/olivetti-l1-m20/89051.html](https://wowroms.com/en/roms/mame/olivetti-l1-m20/89051.html)]. For legal reasons, most ROMs are not included in MAME ^[[https://wiki.mamedev.org/index.php/FAQ:ROMs](https://wiki.mamedev.org/index.php/FAQ:ROMs)].
+After installing MAME, one needs to separately download the M20's ROM contents, e.g. [_m20.zip_](https://wowroms.com/en/roms/mame/olivetti-l1-m20/89051.html). For legal reasons, most ROMs are [not included](https://wiki.mamedev.org/index.php/FAQ:ROMs) in MAME.
 
 Secondly, one needs a floppy to boot from. Floppy disk images of different types can be loaded. Those can be: dd/ sdd/ rdm20 *.img (M20 floppy-sector-dumps), Teledisk *.td0, or ImageDisk *.imd files, as found in the [disk images section](http://www.z80ne.com/m20/index.php?argument=sections/download/wrm20/wrm20.inc). Single images will only work if they have bootable content (e.g. Olivetti's M20 operating system PCOS). A good entry point is _pcos102.img_. 
 
@@ -46,14 +46,16 @@ We have successfully fixed _spiele+uhr.img_, which will now boot into PCOS and l
 ### Make floppy images writable
 
 MAME supports reading multiple floppy image formats: mfi (MAME floppy image), img (M20 floppy sector dumps, we will also call this format "M20"), imd (Image Disk), td0 (Teledisk). Only some of these images are writable:
+
 | mfi | m20 | imd | td0 |
 |:---:|:------------:|:---:|:---:|
-| yes | since v0.212^[[https://github.com/mamedev/mame/pull/5445](https://github.com/mamedev/mame/pull/5445)] | no | no |
-MAME supplies a tool^[[https://docs.mamedev.org/tools/floptool.html](https://docs.mamedev.org/tools/floptool.html)] for converting between these different formats, with the same limitations for write support. The following will convert an ImageDisk floppy image into a writable M20 sector image:
+| yes | [since v0.212](https://github.com/mamedev/mame/pull/5445) | no | no |
+
+MAME supplies a [tool](https://docs.mamedev.org/tools/floptool.html) for converting between these different formats, with the same limitations for write support. The following will convert an ImageDisk floppy image into a writable M20 sector image:
 
     $ floptool flopconvert imd m20 floppy1.imd floppy1.img
  
-Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. One of the two images needs to be a system disk in slot0, be able to boot into PCOS, and contain the _vcopy_ tool (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)). Both images also needs a correct track0 as described above, which is usually the case for the _*.imd_ and _*.td0_ images. Then boot PCOS and copy the source image over to the target image.
+Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. One of the two images needs to be a system disk in slot0, be able to boot into PCOS, and contain the _vcopy_ tool (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)[^1]). Both images also needs a correct track0 as described above, which is usually the case for the _*.imd_ and _*.td0_ images. Then boot PCOS and copy the source image over to the target image.
 
 On linux:
 
@@ -68,7 +70,7 @@ It is also possible to create a completely new image from the MAME in-game menu.
 
 ### Reading and writing BASIC files from images
 
-Files contained in a regular M20-img file can be accessed with [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc).  Note that BASIC files are usually saved in a compressed/ tokenized binary format. An interesting project to learn about the M20-Basic and convert the tokenized version to ASCII is the [M20 Basic Detokenizer](https://github.com/gfis/basdetok/blob/master/src/main/java/org/teherba/basdetok/M20Detokenizer.java)^[[https://github.com/gfis/basdetok](https://github.com/gfis/basdetok)]. Alternatively, one can save files as ASCII via MAME under PCOS BASIC with the "A" option, then extract with m20floppy:
+Files contained in a regular M20-img file can be accessed with [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc).  Note that BASIC files are usually saved in a compressed/ tokenized binary format. An [interesting](https://github.com/gfis/basdetok) project to learn about the M20-Basic and convert the tokenized version to ASCII is the [M20 Basic Detokenizer](https://github.com/gfis/basdetok/blob/master/src/main/java/org/teherba/basdetok/M20Detokenizer.java)[^2]. Alternatively, one can save files as ASCII via MAME under PCOS BASIC with the "A" option, then extract with m20floppy:
 
     # SAVE "0:<filename>",A
     $ m20 <image.img> get <filename>
@@ -79,9 +81,9 @@ When writing BASIC code in ASCII back to the img, one has to make sure, that the
 
 The original M20 stored data on the physical floppy in two different encodings. Part of the first track has data encoded in FM, while the rest of the floppy was encoded in MFM. PC floppy controllers usually do not understand the FM encoding, so reading of this section was often skipped during imaging.
 
-Even if the whole floppy track can be read, one has to deal with an additional difficulty: FM tracks are 16 sectors * 128 Bytes (= 2048 Bytes) in size, while MFM encoded track size is 16 sectors * 256 Bytes (= 4096 Bytes). To simplify handling of the image file, MAME on the other hand assumes _all_ sectors to be of equal 256 Byte size^[[https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9)]. 
+Even if the whole floppy track can be read, one has to deal with an additional difficulty: FM tracks are 16 sectors * 128 Bytes (= 2048 Bytes) in size, while MFM encoded track size is 16 sectors * 256 Bytes (= 4096 Bytes). To simplify handling of the image file, MAME on the other hand assumes _all_ sectors to be of [equal 256 Byte size](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9). 
 
-When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from^[[https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/](https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/)]:
+When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^3]:
 
 |Track.Side| Physical floppy format | Floppy image
 |:---|---:|:---:|
@@ -116,7 +118,7 @@ This leads to the conclusion that the simplest way to image floppies, is still t
     
 ### Compiling MAME and floptool from source
 
-The latest version of MAME is the github master branch^[[https://github.com/mamedev/mame](https://github.com/mamedev/mame)]. On Linux just type "make" in the checked out tree. To compile floptool etc. as well, add the "tools" argument. Compiling only the M20 driver is significantly faster and can be done by adding the "subtarget" and "sources" arguments:
+The latest version of MAME is the github [master branch](https://github.com/mamedev/mame). On Linux just type "make" in the checked out tree. To compile floptool etc. as well, add the "tools" argument. Compiling only the M20 driver is significantly faster and can be done by adding the "subtarget" and "sources" arguments:
 
     $ make -j8 TOOLS=1 SUBTARGET=m20 SOURCES=olivetti/m20.cpp
 
@@ -185,20 +187,26 @@ To work with any given system language one would need access to the emulated key
 ### Notes, known issues, open questions, TODOs
 
 * Open questions:
-	* How to change the language/ keyboard under pcos1? 
-	* Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
+    * How to change the language/ keyboard under pcos1? 
+    * Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
+
 * Known issues at the time of writing (possibly MAME related):
-	* Oliword currently causes MAME to hang with 100% cpu load, after entering date and time
-	* Creating an new M20 floppy through the MAME menu causes MAME to crash
-	* Is printer support possible?
-	* What is missing for the "Command+S" boottime easteregg?
-* Known issues at the time of writing (possibly data related): 
-	* pcos20f.img: "Not enough memory to boot PCOS"
-	* pcos11d.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos13.img.
-	* startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
+    * Oliword currently causes MAME to hang with 100% cpu load, after entering date and time
+    * Creating an new M20 floppy through the MAME menu causes MAME to crash
+    * Is printer support possible?
+    * What is missing for the "Command+S" boottime easteregg?
 
- - [ ] Add pcos20h.img to the site
- - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip from previous article version
+* Known issues at the time of writing (possibly data related):
 
+    * pcos20f.img: "Not enough memory to boot PCOS"
+    * pcos11d.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos13.img.
+    * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
+
+ - [ ] Add pcos20h.img 
+ - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
+
+[^1]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf
+[^2]: https://github.com/gfis/basdetok
+[^3]: https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/
 
 

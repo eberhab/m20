@@ -45,7 +45,7 @@ CMD files need to contain at least the following information:
 - Location of the M20 bios: `-rompath <location>`
 - Image (type) to be loaded: `-flop1 <image.zip>`
 
-Additional MAME commandline-arguments^[[https://docs.mamedev.org/commandline/commandline-all.html](https://docs.mamedev.org/commandline/commandline-all.html)]:
+Additional MAME [commandline-arguments](https://docs.mamedev.org/commandline/commandline-all.html):
 
 - M20 Bios version: e.g. `-bios 1`
 - Second floppy drive: `-flop2 <image>`
@@ -87,7 +87,7 @@ Examples for some games are provided in `retropad_mappings_cfg.zip`. For a compl
 This guide is based on RetroArch v1.14. The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
 
 The RetroArch directory on the Android device is assumed to be under: "/storage/emulated/0/RetroArch"
-After setup, the basic structure inside the RetroArch folder should look like this^[[https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728](https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728)]:
+After setup, the basic structure inside the RetroArch folder should look like this[^1]:
 
     ./roms/m20/m20.zip
     ./roms/m20/<game>.zip
@@ -101,7 +101,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 ### Setup
 
-1) Start by installing Retroarch 64 bit for Android^[[https://www.retroarch.com/?page=platform](https://www.retroarch.com/?page=platform)].
+1) Start by installing [Retroarch](https://www.retroarch.com/?page=platform) 64 bit for Android.
    
 2) Download the "Multi (MESS - Current)" via the core downloader.
 
@@ -338,8 +338,8 @@ The period/ stop key also does not work when attaching a physical keyboard.
  
 - [ ] Finish Pacman BAS game
 - [ ] Mapping: Create more controller mappings
-- [ ] Mapping: Why does \<remap> not work? Investigate `-ctrlrpath cfg -ctrlr test´.
+- [ ] Mapping: Why does \<remap> not work? [Investigate](https://www.reddit.com/r/MAME/comments/10864xo/keyboard_button_remap/) `-ctrlrpath cfg -ctrlr test´.
 - [ ] Compile Mame-Mess core for Switch
 - [X] Compile Mame-Mess core for Android
 
-
+[^1]: https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728
