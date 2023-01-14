@@ -1,5 +1,5 @@
 ﻿
-## Emulating the M20 with RetroArch
+# Emulating the M20 with RetroArch
 
 Version: 11 Jan 2023
 
@@ -18,7 +18,7 @@ The goal of this article is to get M20 emulation running on RetroArch, and map s
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
 |Retropad controller mapping configs | [retropad_mappings_cfg.zip](cfg/retropad_mappings_cfg.zip) | 1160271 | e3b9e761 |
-|M20 games, artwork, hash table | roms.zip | 7215632 | 2d90bb90 |
+|M20 games, artwork, hash table | roms.zip | 7215749 | 4ced4d1b |
 |Source code of all BAS games | code.zip | 192370 | 9ee4e53a |
 
 
@@ -82,7 +82,7 @@ Another (much simpler) option should be to just replace/ [substitute](https://do
 
 Examples for some games are provided in `retropad_mappings_cfg.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
 
-## RetroArch on Android 
+# RetroArch on Android 
 
 This guide is based on RetroArch v1.14. The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
 
@@ -158,7 +158,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 * Create [Android64 MESS core](https://github.com/libretro/mame/pull/342) and related [info file](https://github.com/libretro/libretro-super/pull/1706)
 * Add a more complete [gamelist](https://github.com/mamedev/mame/pull/10832) to MAME
 
-## RetroArch on RetroPie
+# RetroArch on RetroPie
 
 RetroPie is more versatile than pure RetroArch, so setup is also a bit more complex, with the advantage, that an up to date MAME core is readily available, as well as stand alone MAME.
 
@@ -241,7 +241,7 @@ This guide will explain roughly which files needed to modify and provide a gener
     * [Cygnus Blue Flames](https://github.com/DTEAM-1/cygnus-blue-flames)  theme has art support for the M20.
     * Place your own machine art files into `/etc/emulationstation/themes/carbon/m20/`. Take the ./carbon/mame machine as a reference.
 
-## The M20 keyboard in MAME and RetroArch
+# The M20 keyboard in MAME and RetroArch
 
 ### Retropad Numbering
 
