@@ -18,8 +18,8 @@ The goal of this article is to get M20 emulation running on RetroArch, and map s
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
 |Retropad controller mapping configs | [retropad_mappings_cfg.zip](cfg/retropad_mappings_cfg.zip) | 1160271 | e3b9e761 |
-|M20 games, artwork, hash table | roms.zip | 7215749 | 4ced4d1b |
-|Source code of all BAS games | code.zip | 192370 | 9ee4e53a |
+|Olivetti M20 - games, thumbnails, MAME hash table | games.zip | 7215749 | 4ced4d1b |
+|Olivetti M20 - source code of all BAS games | code.zip | 192370 | 9ee4e53a |
 
 
 #### Loading floppy images in a non-keyboard environment
@@ -49,11 +49,14 @@ Additional MAME [commandline-arguments](https://docs.mamedev.org/commandline/com
 
 - M20 Bios version: e.g. `-bios 1`
 - Second floppy drive: `-flop2 <image>`
-- Key/button-config directory to use: `-cfg_directory <location>`
+- System config directory: `-cfg_directory <location>`
+- Controller- config/ directory: `-ctrlrpath <location> -ctrlr <config-name>`
 - Execute after launch: `-autoboot_delay 15 -autoboot_command "<cmd>"`
 - Emulation speed: `-speed <factor>`
 
-A minimal example is provided in `example.zip`.
+A minimal example could look like this:
+
+    mame m20 -speed 1.1 -cfg_directory /storage/emulated/0/RetroArch/roms/m20/cfg/othello -rompath /storage/emulated/0/RetroArch/roms/m20 -flop1 /storage/emulated/0/RetroArch/roms/m20/othello.zip
 
 #### Mapping M20 keys to the RetroPad
 
@@ -61,26 +64,15 @@ Using the retropad (on-screen) gamepad instead of a keyboard (e.g. on a phone) i
 
 	"-cfg_directory <RetroArch>/roms/m20/cfg/<game>"
 
-This will make mame create an "m20.cfg" file inside the given directory which can then be edited. Let's make a [simple mapping](https://docs.mamedev.org/advanced/ctrlr_config.html#id4) for the space key, hereby keeping the keyboard support:
-	        
+This will make mame create an "m20.cfg" file inside the given directory which can then be edited. Let's make a [simple mapping](https://docs.mamedev.org/advanced/ctrlr_config.html#overriding-defaults-by-input-type) for the space key, hereby keeping the keyboard support:
+
     <input>
-	    <keyboard tag=":kbd:m20" enabled="1" />
-	    <port tag=":kbd:m20:LINE6" type="KEYBOARD" mask="1" defvalue="0">
-	    <newseq type="standard">KEYCODE_SPACE OR JOYCODE_1_BUTTON2</newseq></port>
+		<keyboard tag=":kbd:m20" enabled="1" />
+		<port tag=":kbd:m20:LINE6" type="KEYBOARD" mask="1" defvalue="0">
+		<newseq type="standard">KEYCODE_SPACE OR JOYCODE_1_BUTTON2</newseq></port>
     </input>
 
-Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. 
-
-Another (much simpler) option should be to just replace/ [substitute](https://docs.mamedev.org/advanced/ctrlr_config.html#id3) the keyboard keys. For this we need to create a controller config instad via `-ctrlrpath cfg -ctrlr mauerschiessen` and then edit `./cfg/mauerschiessen.cfg`. For the complete pong example see below. However I could not get this to work, and these remaps do not seem to show up in the in-game menu. TODO: investigate further:
-		      
-	<input>
-		<remap origcode="KEYCODE_SPACE" newcode="JOYCODE_1_BUTTON2" />
-		<remap origcode="KEYCODE_0" newcode="JOYCODE_1_HAT1DOWN" />
-		<remap origcode="KEYCODE_2" newcode="JOYCODE_1_HAT1UP" />
-		<remap origcode="KEYCODE_J" newcode="JOYCODE_1_START" />
-	</input>
-
-Examples for some games are provided in `retropad_mappings_cfg.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
+Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. Examples for some games are provided in `retropad_mappings_cfg.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
 
 # RetroArch on Android 
 
@@ -248,12 +240,12 @@ This guide will explain roughly which files needed to modify and provide a gener
 Issues: L2 and R2 naming is not very intuitive. Maybe an oddity with the mapping between RetroArch an Mame or with v0.226? Mapping works nonetheless.
 
     Prefix: JOYCODE_1_*
-	BUTTON1: B      |     RZAXIS_NEG_SWITCH : L2          |    HAT1UP    : UP
-	BUTTON2: A      |     ZAXIS_NEG_SWITCH  : R2          |    HAT1LEFT  : LEFT 
-	BUTTON3: Y      |     SELECT            : Select      |    HAT1RIGHT : RIGHT 
-	BUTTON4: X      |     START             : Start       |    HAT1DOWN  : DOWN
-	BUTTON5: L1     |     BUTTON9           : L3       
-	BUTTON6: R1     |     BUTTON10          : R3
+	BUTTON1: A      |     RZAXIS_NEG_SWITCH: L2          |    HAT1UP           : UP
+	BUTTON2: B      |     ZAXIS_NEG_SWITCH : R2          |    HAT1LEFT         : LEFT 
+	BUTTON3: X      |     SELECT           : Select      |    HAT1RIGHT        : RIGHT 
+	BUTTON4: Y      |     START            : Start       |    HAT1DOWN         : DOWN
+	BUTTON5: L1     |     BUTTON9          : L3          |    YAXIS_UP_SWITCH  : Analog UP switch
+	BUTTON6: R1     |     BUTTON10         : R3          |    XAXIS_LEFT_SWITCH: Analog LEFT switch
 
 ### Mame M20 key mapping
 
