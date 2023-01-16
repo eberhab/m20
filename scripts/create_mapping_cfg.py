@@ -120,6 +120,8 @@ def getpad(btn: str, id: Union[List, int] = 1):
 def validate():
     global config, kbd, pad
     for game, cfg in config.items():
+        if isinstance(cfg, str):
+            continue
         for key in cfg.keys():
             assert not key.islower(
             ), f'{game}: Key "{key}" is lowercase. Only uppercase allowed.'
@@ -151,8 +153,10 @@ def port_cfg(kbd_key, pad_btn):
 
 
 def create():
-    global config_path, config, create_controller_config, create_cmd_files, extra_settings
+    global config, create_controller_config, create_cmd_files, extra_settings
 
+    config_path = 'cfg' # A relative directory inside the roms directory
+    cmd_path = 'cmd' # A relative local directory
     for game, cfg in config.items():
         if create_controller_config:
             # controller config
@@ -165,16 +169,30 @@ def create():
 
         if not os.path.exists(cfg_path):
             os.makedirs(cfg_path)
-        
-        if create_cmd_files:
-            # TODO: use extra_settings
-            pass
-        
+
         if isinstance(cfg, str):
             # This game inherits its mapping from another game
             cfg = config[cfg]
 
-        print(f'Writing {cfg_file}...')
+        if create_cmd_files:
+            cmd_file = f'{cmd_path}/{game}.cmd'
+            print(f'Writing {cfg_file} and {cmd_file} ...')
+            if not os.path.exists(cmd_path):
+                os.makedirs(cmd_path)
+            with open(cmd_file, 'w') as f:
+                f.write('mame m20 ')
+                if game in extra_settings.keys():
+                    for k, v in extra_settings[game].items():
+                        f.write(f'-{k} {v} ')
+                if create_controller_config:
+                    f.write(f'-ctrlrpath {rom_path}/{config_path}/ -ctrlr {game} ')
+                else:
+                    f.write(f'-cfg_directory {rom_path}/{config_path}/{game}/ ')
+                f.write(f'-rompath {rom_path} ')
+                f.write(f'-flop1 {rom_path}/{game}.zip\n')
+        else:
+            print(f'Writing {cfg_file} ...')
+
         with open(cfg_file, 'w') as f:
             f.write(header + '\n')
             for key, btn in cfg.items():
@@ -184,7 +202,6 @@ def create():
 
 ### GAME SETTINGS ###
 
-config_path = 'cfg' # A relative directory inside the roms directory
 rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
 rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
 create_controller_config = False  # Create controller config or system config?
@@ -236,6 +253,7 @@ config = {
     'othello': {
         'N': ['SELECT', 'B'],
         'J': 'START',
+        'Z': 'START',
         '0': 'Y',
         '1': 'L1',
         '3': 'L2',
@@ -246,30 +264,82 @@ config = {
         '6': ['RIGHT', 'A-RIGHT'],
         '8': ['UP', 'A-UP']
     },
+    'othello_en': 'othello',
     'zweikampf': {
         'SPACE': ['A', 'X'],
         'J': 'START',
         '0': ['RIGHT', 'A-RIGHT'],
         '2': ['LEFT', 'A-LEFT']
+    },
+    'heimkehr': {
+        'SPACE': 'A',
+        '2': ['DOWN', 'A-DOWN'],
+        '4': ['LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP'],
+        'J': 'START'
+    },
+    'heimkehr1': 'heimkehr',
+    'solitario': {
+        '2': ['DOWN', 'A-DOWN'],
+        '4': ['LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP'],
+        'SPACE': 'A',
+        'E': 'SELECT',
+        'Q': 'START',
+        'H': 'X',
+        'C': 'B'
+    },
+    'topodrago': {
+        '2': ['DOWN', 'A-DOWN'],
+        '4': ['LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP'],
+        'S': 'START'
+    },
+    'mazedaze': {
+        '2': ['DOWN', 'A-DOWN'],
+        '4': ['LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP']
+    },
+    'micromissiles': {
+        '4': 'L1',
+        '6': 'R1',
+        '1': 'L2',
+        '3': 'R2',
+        '8': 'A',
+        'S': 'START',
+        'F': 'SELECT'
+    },
+    '3dmuehle': {
+        '1': 'L1',
+        '2': 'R1',
+        '3': 'L2',
+        '4': 'R2',
+        'COLON': ['X','Y'],
+        'ENTER': 'A'
+    },
+    'pacman': {
+        '2': ['DOWN', 'A-DOWN'],
+        '4': ['LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP'],
+        'SPACE': 'A'
     }
 }
-    
+
+# Can by any MAME cmd line args
 extra_settings = {
-    'mauerschiessen': {'speed': 0.5}
+    'mauerschiessen': {'speed': 0.5},
+    'bruecke': {'speed': 0.7},
+    'flakschiessen': {'speed': 0.5},
+    'othello': {'speed': 1.1},
+    'zweikampf': {'speed': 0.5}
 }
 
 ### RUN ###
 
 validate()
 create()
-
-
-
-
-
-
-
-
-
-
-
