@@ -2,10 +2,12 @@
 
 ## Emulating the M20 with MAME
 
-Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, [almost like on the original machine](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739). This article is based on MAME v0.251 on Linux Mint 21 (Jan 11th 2023).
+--> Proposed update for [M20-Mame on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) <--
+
+Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, almost like on the original machine [^1]. This article is based on MAME v0.251 on Linux Mint 21 (Jan 11th 2023).
 
 <p align="center">
-  <img src="images/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
+  <img src="article_media/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
 </p>
 
 
@@ -55,7 +57,7 @@ MAME supplies a [tool](https://docs.mamedev.org/tools/floptool.html) for convert
 
     $ floptool flopconvert imd m20 floppy1.imd floppy1.img
  
-Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. One of the two images needs to be a system disk in slot0, be able to boot into PCOS, and contain the _vcopy_ tool (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)[^1]). Both images also needs a correct track0 as described above, which is usually the case for the _*.imd_ and _*.td0_ images. Then boot PCOS and copy the source image over to the target image.
+Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. One of the two images needs to be a system disk in slot0, be able to boot into PCOS, and contain the _vcopy_ tool (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)[^2]). Both images also needs a correct track0 as described above, which is usually the case for the _*.imd_ and _*.td0_ images. Then boot PCOS and copy the source image over to the target image.
 
 On linux:
 
@@ -70,7 +72,7 @@ It is also possible to create a completely new image from the MAME in-game menu.
 
 ### Reading and writing BASIC files from images
 
-Files contained in a regular M20-img file can be accessed with [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc).  Note that BASIC files are usually saved in a compressed/ tokenized binary format. An [interesting](https://github.com/gfis/basdetok) project to learn about the M20-Basic and convert the tokenized version to ASCII is the [M20 Basic Detokenizer](https://github.com/gfis/basdetok/blob/master/src/main/java/org/teherba/basdetok/M20Detokenizer.java)[^2]. Alternatively, one can save files as ASCII via MAME under PCOS BASIC with the "A" option, then extract with m20floppy:
+Files contained in a regular M20-img file can be accessed with [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc).  Note that BASIC files are usually saved in a compressed/ tokenized binary format. An [interesting](https://github.com/gfis/basdetok) project to learn about the M20-Basic and convert the tokenized version to ASCII is the [M20 Basic Detokenizer](https://github.com/gfis/basdetok/blob/master/src/main/java/org/teherba/basdetok/M20Detokenizer.java)[^3]. Alternatively, one can save files as ASCII via MAME under PCOS BASIC with the "A" option, then extract with m20floppy:
 
     # SAVE "0:<filename>",A
     $ m20 <image.img> get <filename>
@@ -83,7 +85,7 @@ The original M20 stored data on the physical floppy in two different encodings. 
 
 Even if the whole floppy track can be read, one has to deal with an additional difficulty: FM tracks are 16 sectors * 128 Bytes (= 2048 Bytes) in size, while MFM encoded track size is 16 sectors * 256 Bytes (= 4096 Bytes). To simplify handling of the image file, MAME on the other hand assumes _all_ sectors to be of [equal 256 Byte size](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9). 
 
-When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^3]:
+When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^4]:
 
 |Track.Side| Physical floppy format | Floppy image
 |:---|---:|:---:|
@@ -205,8 +207,9 @@ To work with any given system language one would need access to the emulated key
  - [ ] Add pcos20h.img 
  - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
 
-[^1]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf
-[^2]: https://github.com/gfis/basdetok
-[^3]: https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/
+[^1]: https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739
+[^2]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf
+[^3]: https://github.com/gfis/basdetok
+[^4]: https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/
 
 

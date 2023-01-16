@@ -4,7 +4,7 @@
 Version: 11 Jan 2023
 
 <p align="center">
-  <img src="images/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
+  <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
 </p>
 
 * https://www.smbaker.com/raspberry-pi-floppy-controller-board

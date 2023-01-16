@@ -151,10 +151,10 @@ def port_cfg(kbd_key, pad_btn):
 
 
 def create():
-    global config_path, config
+    global config_path, config, create_controller_config, create_cmd_files, extra_settings
 
     for game, cfg in config.items():
-        if controller_config:
+        if create_controller_config:
             # controller config
             cfg_path = config_path
             cfg_file = f'{cfg_path}/{game}.cfg'
@@ -165,6 +165,14 @@ def create():
 
         if not os.path.exists(cfg_path):
             os.makedirs(cfg_path)
+        
+        if create_cmd_files:
+            # TODO: use extra_settings
+            pass
+        
+        if isinstance(cfg, str):
+            # This game inherits its mapping from another game
+            cfg = config[cfg]
 
         print(f'Writing {cfg_file}...')
         with open(cfg_file, 'w') as f:
@@ -176,8 +184,11 @@ def create():
 
 ### GAME SETTINGS ###
 
-config_path = 'cfg'
-controller_config = False  # Create a controller config/ system config?
+config_path = 'cfg' # A relative directory inside the roms directory
+rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
+rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
+create_controller_config = False  # Create controller config or system config?
+create_cmd_files = True
 
 # Keyboard key: retropad button (All CAPS!)
 config = {
@@ -224,7 +235,7 @@ config = {
     },
     'othello': {
         'N': ['SELECT', 'B'],
-        'Z': 'START',
+        'J': 'START',
         '0': 'Y',
         '1': 'L1',
         '3': 'L2',
@@ -242,6 +253,23 @@ config = {
         '2': ['LEFT', 'A-LEFT']
     }
 }
+    
+extra_settings = {
+    'mauerschiessen': {'speed': 0.5}
+}
+
+### RUN ###
 
 validate()
 create()
+
+
+
+
+
+
+
+
+
+
+

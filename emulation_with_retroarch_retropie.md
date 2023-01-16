@@ -6,7 +6,7 @@ Version: 11 Jan 2023
 This guide highlights the particularities of running the M20 MAME driver on RetroArch with the examples of setting it up on Android and Retropie. For a general overview of running the M20 with MAME itself refer to the [M20 emulation with MAME article](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc).
 
 <p align="center">
-  <img src="images/retropad.jpg" alt="Mauerschießen running on Android RetroArch" width="700px"/>
+  <img src="article_media/retropad.jpg" alt="Mauerschießen running on Android RetroArch" width="700px"/>
 </p>
 
 Above is the iconic game "Mauerschießen", a pong clone from the German demo floppy running on Android RetroArch, playable entirely by gamepad. The necessary keys have been mapped to the controller.
@@ -17,9 +17,9 @@ The goal of this article is to get M20 emulation running on RetroArch, and map s
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Retropad controller mapping configs | [retropad_mappings_cfg.zip](cfg/retropad_mappings_cfg.zip) | 1160271 | e3b9e761 |
-|Olivetti M20 - games, thumbnails, MAME hash table | games.zip | 7215749 | 4ced4d1b |
-|Olivetti M20 - source code of all BAS games | code.zip | 192370 | 9ee4e53a |
+|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 1160271 | e3b9e761 |
+|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7215754 | 9aead510 |
+|Olivetti M20 - source code of all BAS games | m20_code.zip | 192370 | 9ee4e53a |
 
 
 #### Loading floppy images in a non-keyboard environment
@@ -72,7 +72,7 @@ This will make mame create an "m20.cfg" file inside the given directory which ca
 		<newseq type="standard">KEYCODE_SPACE OR JOYCODE_1_BUTTON2</newseq></port>
     </input>
 
-Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. Examples for some games are provided in `retropad_mappings_cfg.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
+Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. Examples for some games are provided in `m20_retropad_mapping.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
 
 # RetroArch on Android 
 
@@ -326,11 +326,12 @@ The period/ stop key also does not work when attaching a physical keyboard.
 	R SHIFT    - RSHIFT      - :kbd:m20:MODIFIERS - 4
 	L SHIFT    - LSHIFT      - :kbd:m20:MODIFIERS - 8 
 
-## TODOs
+## Issues - TODOs
  
 - [ ] Finish Pacman BAS game
 - [ ] Mapping: Create more controller mappings
-- [ ] Mapping: Why does \<remap> not work? [Investigate](https://www.reddit.com/r/MAME/comments/10864xo/keyboard_button_remap/) `-ctrlrpath cfg -ctrlr test´.
+- [ ] Mapping: Investigate why controller conifig is not applied for softlisted roms
+- [ ] Mapping: Investigate why from some games X-Y and A-B are inverted
 - [ ] Compile Mame-Mess core for Switch
 - [X] Compile Mame-Mess core for Android
 
