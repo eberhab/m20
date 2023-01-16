@@ -6,7 +6,8 @@ from typing import Union, List
 header = '<?xml version="1.0"?><mameconfig version="10"><system name="m20"><input>'  #<keyboard tag=":kbd:m20" enabled="1" />
 footer = '</input></system></mameconfig>'
 
-# MAME KEYCODE_*: [Port, Mask, M20 key]
+# Define M20 Keyboard
+# MAME 'KEYCODE_*': [Port, Mask, M20 key]
 kbd = {
     'ESC': ['LINE0', 1, 'RESET'],
     'LALT': ['LINE0', 2, '<  >'],
@@ -82,7 +83,8 @@ kbd = {
     'LSHIFT': ['MODIFIERS', 128, 'L SHIFT']
 }
 
-# Retropad Button: JOYCODE_1_*
+# Define RetroPad
+# 'Button': 'JOYCODE_1_*'
 pad = {
     'A': 'BUTTON1',
     'B': 'BUTTON2',
@@ -106,8 +108,9 @@ pad = {
     'A-DOWN': 'YAXIS_DOWN_SWITCH'
 }
 
-
 def getpad(btn: str, id: Union[List, int] = 1):
+    # Get RetroPad button config-name for a aingle pad (pad 1)
+    # or a given list of pad IDs 
     # getpad('A', 1)
     # getpad('A', [1, 2])
     global pad
@@ -118,25 +121,23 @@ def getpad(btn: str, id: Union[List, int] = 1):
 
 
 def validate():
+    # Validate the given mapping config for all games for existing keys
     global config, kbd, pad
     for game, cfg in config.items():
         if isinstance(cfg, str):
             continue
         for key in cfg.keys():
-            assert not key.islower(
-            ), f'{game}: Key "{key}" is lowercase. Only uppercase allowed.'
-            assert key in kbd.keys(
-            ), f'{game}: Key "{key}" is not an M20 keyboard key.'
+            assert not key.islower(), f'{game}: Key "{key}" is lowercase. Only uppercase allowed.'
+            assert key in kbd.keys(), f'{game}: Key "{key}" is not an M20 keyboard key.'
         for key in cfg.values():
             keys = key if isinstance(key, list) else [key]
             for key in keys:
-                assert not key.islower(
-                ), f'{game}: Btn "{key}" is lowercase. Only uppercase allowed.'
-                assert key in pad.keys(
-                ), f'{game}: Btn "{key}" is not a RetroPad button.'
+                assert not key.islower(), f'{game}: Btn "{key}" is lowercase. Only uppercase allowed.'
+                assert key in pad.keys(), f'{game}: Btn "{key}" is not a RetroPad button.'
 
 
 def port_cfg(kbd_key, pad_btn):
+    # Compile a config entry for a single key
     # port_cfg('0', 'DOWN')
     global kbd, pad
     port = kbd[kbd_key][0]
@@ -151,9 +152,27 @@ def port_cfg(kbd_key, pad_btn):
     s += '</newseq></port>'
     return s
 
+def create_cmd(game, cmd_file, config_path, cmd_path):
+    # create a cmd launch file
+    global extra_settings, rom_path, create_controller_config
+    
+    if not os.path.exists(cmd_path):
+        os.makedirs(cmd_path)
+    with open(cmd_file, 'w') as f:
+        f.write('mame m20 ')
+        if game in extra_settings.keys():
+            for k, v in extra_settings[game].items():
+                f.write(f'-{k} {v} ')
+        if create_controller_config:
+            f.write(f'-ctrlrpath {rom_path}/{config_path}/ -ctrlr {game} ')
+        else:
+            f.write(f'-cfg_directory {rom_path}/{config_path}/{game}/ ')
+        f.write(f'-rompath {rom_path} ')
+        f.write(f'-flop1 {rom_path}/{game}.zip\n')
 
 def create():
-    global config, create_controller_config, create_cmd_files, extra_settings
+    # Create config and cmd launch files for alle games
+    global config, create_controller_config, create_cmd_files
 
     config_path = 'cfg' # A relative directory inside the roms directory
     cmd_path = 'cmd' # A relative local directory
@@ -177,19 +196,7 @@ def create():
         if create_cmd_files:
             cmd_file = f'{cmd_path}/{game}.cmd'
             print(f'Writing {cfg_file} and {cmd_file} ...')
-            if not os.path.exists(cmd_path):
-                os.makedirs(cmd_path)
-            with open(cmd_file, 'w') as f:
-                f.write('mame m20 ')
-                if game in extra_settings.keys():
-                    for k, v in extra_settings[game].items():
-                        f.write(f'-{k} {v} ')
-                if create_controller_config:
-                    f.write(f'-ctrlrpath {rom_path}/{config_path}/ -ctrlr {game} ')
-                else:
-                    f.write(f'-cfg_directory {rom_path}/{config_path}/{game}/ ')
-                f.write(f'-rompath {rom_path} ')
-                f.write(f'-flop1 {rom_path}/{game}.zip\n')
+            create_cmd(game, cmd_file, config_path, cmd_path)
         else:
             print(f'Writing {cfg_file} ...')
 
@@ -204,12 +211,13 @@ def create():
 
 rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
 rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
-create_controller_config = False  # Create controller config or system config?
+create_controller_config = True  # Create controller config or system config?
 create_cmd_files = True
 
 # Keyboard key: retropad button (All CAPS!)
+# TODO: The following games have inverted A-B, X-Y btns (why?): [flakschiessen, zweikampf]
 config = {
-    'test': {
+    'pcos20h': {
         'A': 'A',
         'B': 'B',
         'X': 'X',
@@ -232,17 +240,17 @@ config = {
         'P': 'A-DOWN'
     },
     'flakschiessen': {
-        'SPACE': ['A', 'X'],
+        'SPACE': ['A', 'B'],
         'J': 'START'
     },
     'bruecke': {
         'ENTER': 'X',
         'SPACE': 'A',
         'J': 'START',
-        '1': 'L2',
-        '2': 'R2',
-        'STOP': 'L1',
-        '0': 'R1'
+        '1': ['L2', 'LEFT'],
+        '2': ['R2', 'UP'],
+        'STOP': ['L1', 'DOWN'],
+        '0': ['R1', 'RIGHT']
     },
     'mauerschiessen': {
         'SPACE': ['A', 'X'],
@@ -253,6 +261,18 @@ config = {
     'othello': {
         'N': ['SELECT', 'B'],
         'J': 'START',
+        '0': 'Y',
+        '1': 'L1',
+        '3': 'L2',
+        'SPACE': 'A',
+        'ENTER': 'X',
+        '2': ['R1', 'DOWN', 'A-DOWN'],
+        '4': ['R2', 'LEFT', 'A-LEFT'],
+        '6': ['RIGHT', 'A-RIGHT'],
+        '8': ['UP', 'A-UP']
+    },
+    'othello_en': {
+        'N': ['SELECT', 'B'],
         'Z': 'START',
         '0': 'Y',
         '1': 'L1',
@@ -264,9 +284,8 @@ config = {
         '6': ['RIGHT', 'A-RIGHT'],
         '8': ['UP', 'A-UP']
     },
-    'othello_en': 'othello',
     'zweikampf': {
-        'SPACE': ['A', 'X'],
+        'SPACE': ['A', 'B'],
         'J': 'START',
         '0': ['RIGHT', 'A-RIGHT'],
         '2': ['LEFT', 'A-LEFT']
@@ -281,34 +300,34 @@ config = {
     },
     'heimkehr1': 'heimkehr',
     'solitario': {
-        '2': ['DOWN', 'A-DOWN'],
-        '4': ['LEFT', 'A-LEFT'],
-        '6': ['RIGHT', 'A-RIGHT'],
-        '8': ['UP', 'A-UP'],
+        '2_PAD': ['DOWN', 'A-DOWN'],
+        '4_PAD': ['LEFT', 'A-LEFT'],
+        '6_PAD': ['RIGHT', 'A-RIGHT'],
+        '8_PAD': ['UP', 'A-UP'],
         'SPACE': 'A',
-        'E': 'SELECT',
         'Q': 'START',
         'H': 'X',
         'C': 'B'
     },
     'topodrago': {
-        '2': ['DOWN', 'A-DOWN'],
-        '4': ['LEFT', 'A-LEFT'],
-        '6': ['RIGHT', 'A-RIGHT'],
-        '8': ['UP', 'A-UP'],
-        'S': 'START'
+        '2_PAD': ['DOWN', 'A-DOWN'],
+        '4_PAD': ['LEFT', 'A-LEFT'],
+        '6_PAD': ['RIGHT', 'A-RIGHT'],
+        '8_PAD': ['UP', 'A-UP'],
+        'S': 'START',
+        'N': 'SELECT'
     },
     'mazedaze': {
-        '2': ['DOWN', 'A-DOWN'],
-        '4': ['LEFT', 'A-LEFT'],
-        '6': ['RIGHT', 'A-RIGHT'],
-        '8': ['UP', 'A-UP']
+        '2_PAD': ['DOWN', 'A-DOWN'],
+        '4_PAD': ['LEFT', 'A-LEFT'],
+        '6_PAD': ['RIGHT', 'A-RIGHT'],
+        '8_PAD': ['UP', 'A-UP']
     },
     'micromissiles': {
-        '4': 'L1',
-        '6': 'R1',
-        '1': 'L2',
-        '3': 'R2',
+        '4': ['L1', 'UP', 'A-UP'],
+        '6': ['R1', 'DOWN', 'A-DOWN'],
+        '1': ['L2', 'LEFT', 'A-LEFT'],
+        '3': ['R2', 'RIGHT', 'A-RIGHT'],
         '8': 'A',
         'S': 'START',
         'F': 'SELECT'
@@ -336,7 +355,8 @@ extra_settings = {
     'bruecke': {'speed': 0.7},
     'flakschiessen': {'speed': 0.5},
     'othello': {'speed': 1.1},
-    'zweikampf': {'speed': 0.5}
+    'zweikampf': {'speed': 0.5},
+    'mazedaze': {'speed': 0.5}
 }
 
 ### RUN ###

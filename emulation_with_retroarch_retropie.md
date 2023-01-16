@@ -17,8 +17,8 @@ The goal of this article is to get M20 emulation running on RetroArch, and map s
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 1170803 | 102ef12c |
-|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7219964 | f6df2493 |
+|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 336860 | 05c142fd |
+|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7216332 | 73700a65 |
 |Olivetti M20 - source code of all BAS games | m20_code.zip | 192370 | 9ee4e53a |
 
 
@@ -54,17 +54,17 @@ Additional MAME [commandline-arguments](https://docs.mamedev.org/commandline/com
 - Execute after launch: `-autoboot_delay 15 -autoboot_command "<cmd>"`
 - Emulation speed: `-speed <factor>`
 
-A minimal example could look like this:
+An example could look like this:
 
-    mame m20 -speed 1.1 -cfg_directory /storage/emulated/0/RetroArch/roms/m20/cfg/othello -rompath /storage/emulated/0/RetroArch/roms/m20 -flop1 /storage/emulated/0/RetroArch/roms/m20/othello.zip
+    mame m20 -speed 1.1 -ctrlrpath /storage/emulated/0/RetroArch/roms/m20/cfg/ -ctrlr othello -rompath /storage/emulated/0/RetroArch/roms/m20 -flop1 /storage/emulated/0/RetroArch/roms/m20/othello.zip
 
 #### Mapping M20 keys to the RetroPad
 
-Using the retropad (on-screen) gamepad instead of a keyboard (e.g. on a phone) is a bit more difficult, but possible. In order to make this work one needs to map some of retropad buttons to the M20 keyboard. Since every game has different input, we create a dedicated system config on a per image basis, by adding the `cfg_directory` argument to the _*.cmd_ launch file. Custom configs will be placed inside a "cfg" directory with the M20 roms, e.g.:
+Using the retropad (on-screen) gamepad instead of a keyboard (e.g. on a phone) is a bit more difficult, but possible. In order to make this work one needs to map some of retropad buttons to the M20 keyboard. Since every game has different input, we create a dedicated _controller config_ on a per image basis, by adding the `-ctrlrpath` and `-ctrlr` arguments to the _*.cmd_ launch file. Custom configs will be placed inside a "cfg" directory with the M20 roms, e.g.:
 
-	"-cfg_directory <RetroArch>/roms/m20/cfg/<game>"
+	"-ctrlrpath <RetroArch>/roms/m20/cfg/ -ctrlr <game>"
 
-This will make mame create an "m20.cfg" file inside the given directory which can then be edited. Let's make a [simple mapping](https://docs.mamedev.org/advanced/ctrlr_config.html#overriding-defaults-by-input-type) for the space key, hereby keeping the keyboard support:
+This will make mame expect a "\<game>.cfg" file inside the given cfg-directory. Let's make a [simple mapping](https://docs.mamedev.org/advanced/ctrlr_config.html#overriding-defaults-by-input-type) for the space key, hereby keeping the keyboard-key intact:
 
     <input>
 		<keyboard tag=":kbd:m20" enabled="1" />
@@ -74,6 +74,12 @@ This will make mame create an "m20.cfg" file inside the given directory which ca
 
 Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. Examples for some games are provided in `m20_retropad_mapping.zip`. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
 
+When modifying the keys in-game through the MAME menu, the mapping will be saved in a _system config_ file called `m20.cfg`. If one wants to keep those settings on a per game basis, instead of the ctrlrpath and ctrlr arguments, one can supply the cfg_directory argument, to have the system-config stored in a separate location e.g.:
+
+	"-cfg_directory <RetroArch>/roms/m20/cfg/<game>/"
+
+The syntax of the m20.cfg system config file inside this folder is identical to the controller config and can be edited both in-game or with a text editor. Two examples are provided in the example file.
+
 # RetroArch on Android 
 
 This guide is based on RetroArch v1.14. The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
@@ -81,13 +87,14 @@ This guide is based on RetroArch v1.14. The "Multi (MESS - Current)" core is bas
 The RetroArch directory on the Android device is assumed to be under: "/storage/emulated/0/RetroArch"
 After setup, the basic structure inside the RetroArch folder should look like this[^1]:
 
-    ./roms/m20/m20.zip
-    ./roms/m20/<game>.zip
-    ./roms/m20/cfg/<game>/m20.cfg
-    ./system/mame/hash/m20.xml
+    ./roms/m20/m20.zip  (bios)
+    ./roms/m20/<game>.zip  (rom)
+    ./roms/m20/cfg/<game>/m20.cfg  (sys-cfg)
+    ./roms/m20/cfg/<game>.cfg  (ctrlr-cfg)
+    ./system/mame/hash/m20.xml  (softlist)
     ./thumbnails/m20/[Named_Boxarts, Named_Snaps, Named_Titles]/<game>.png
     ./playlists/m20.lpl
-    ./saves/mame/cfg/m20.cfg
+    ./saves/mame/cfg/m20.cfg  (default-sys-cfg)
     ./download
     ./logs
 
@@ -329,10 +336,10 @@ The period/ stop key also does not work when attaching a physical keyboard.
 ## Issues - TODOs
  
 - [ ] Finish Pacman BAS game
-- [ ] Mapping: Create more controller mappings
-- [ ] Mapping: Investigate why controller conifig is not applied for softlisted roms
-- [ ] Mapping: Investigate why from some games X-Y and A-B are inverted
+- [ ] Mapping: Investigate why controller config is not applied for two of the games (flakschiessen, zweikampf) - some residual settings?
+- [ ] Mapping: Investigate why for those games also the X-Y and A-B buttons are inverted when loading mapping through system config
 - [ ] Compile Mame-Mess core for Switch
 - [X] Compile Mame-Mess core for Android
 
 [^1]: https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728
+
