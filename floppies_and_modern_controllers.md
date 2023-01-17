@@ -40,7 +40,7 @@ Should be a 360kB 40 track drive. 80 track drives might be able to read the M20 
 
 ## TODOs
 
-- [ ] Decide on a drive to buy
-- [ ] Research: What are the differences in drives (e.g. 40 vs 80 tracks) and which is the best for M20 floppies?
+- [ ] Can the original M20 boot a floppy with a replaced track0 from a random image?
+
 
 

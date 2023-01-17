@@ -10,6 +10,12 @@ Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.o
   <img src="article_media/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
 </p>
 
+Data provided with this article:
+
+| Description | File | Size | CRC |
+|:--|:--|--:|--:|
+|Olivetti M20 - MAME Romset | m20_roms.zip | xxx | xxx |
+|Olivetti M20 - Source code of all BAS games | m20_code.zip | 192370 | 9ee4e53a |
 
 ### Running M20 floppy images
 
@@ -204,8 +210,14 @@ To work with any given system language one would need access to the emulated key
     * pcos11d.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos13.img.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
 
- - [ ] Add pcos20h.img 
- - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
+- [ ] Create MAME romset with info on how to fix some images
+- [ ] Find out how to switch keyboard language in PCOS1
+- [ ] Add pcos20h.img
+- [ ] Update BAS codes after basdetok is ready
+- [ ] Create "official" m20 images for two days to race, possible?
+- [ ] Add complete mame romset package and instructions on how to fix some images
+- [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
+
 
 [^1]: https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739
 [^2]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf

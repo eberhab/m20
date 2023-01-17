@@ -1,8 +1,11 @@
-FROM openjdk:8-jdk
+# based on: https://git.libretro.com/libretro-infrastructure/libretro-build-android
+# and: https://git.libretro.com/libretro-infrastructure/ci-templates/-/blob/master/android-make.yml
 
 ## Run this file:
 # docker build -t libretro/android libretro-build-android/
 # docker run -it -v "./tmp:/ext" libretro/android
+
+FROM openjdk:8-jdk
 
 # Set Target Versions
 ENV ANDROID_COMPILE_SDK 29
