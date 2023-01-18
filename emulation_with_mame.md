@@ -124,11 +124,19 @@ Track00.0 does not contain any user data (see Page 10.2 of the Italian PCOS 1.0 
 
 This leads to the conclusion that the simplest way to image floppies, is still to read the entire floppy in MFM mode, skipping track00.0 and hence already creating the correct image size needed for MAME, and then transferring the first 4 kiB (128 B actually suffice) from another image. When writing back to floppy one can apply the same procedure in reverse, by first formatting the floppy in a real M20, then copying the image by skipping track00.0.
     
-### Compiling MAME and floptool from source
+### Compiling MAME from source and running older versions
 
 The latest version of MAME is the github [master branch](https://github.com/mamedev/mame). On Linux just type "make" in the checked out tree. To compile floptool etc. as well, add the "tools" argument. Compiling only the M20 driver is significantly faster and can be done by adding the "subtarget" and "sources" arguments:
 
     $ make -j8 TOOLS=1 SUBTARGET=m20 SOURCES=olivetti/m20.cpp
+    
+In order to compile a specific MAME (e.g. v0.212) version we might need to use a different python version:
+
+    $ git clone -b mame0212 --depth 1 https://github.com/mamedev/mame.git mame0212 && cd mame0212
+    $ python3.8 -m venv venv38 && source venv38/bin/activate
+    $ make -j8 SUBTARGET=m20 SOURCES=src/mame/drivers/m20.cpp
+    
+I case it does not work, another options is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
 
 ### Run MSDOS on the M20
 
@@ -210,11 +218,11 @@ To work with any given system language one would need access to the emulated key
     * pcos11d.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos13.img.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
 
-- [ ] Create MAME romset with info on how to fix some images
-- [ ] Find out how to switch keyboard language in PCOS1
-- [ ] Add pcos20h.img
-- [ ] Update BAS codes after basdetok is ready
-- [ ] Create "official" m20 images for two days to race, possible?
+- [ ] Create MAME romset with info on how to fix some images and how to start software
+- [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable)
+- [ ] Images: add pcos20h.img, oliword_de.img.bz2 is actually English not German, Oliword only runs with older mame (e.g. 0.212)
+- [ ] Update all BAS codes after basdetok is ready
+- [ ] Create "official" m20 images (en/it) for two days to race, possible?
 - [ ] Add complete mame romset package and instructions on how to fix some images
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
 
