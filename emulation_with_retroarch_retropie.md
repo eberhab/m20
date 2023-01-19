@@ -334,8 +334,8 @@ The period/ stop key also does not work when attaching a physical keyboard.
 ## Issues - TODOs
  
 - [ ] Finish Pacman BAS game
-- [ ] Mapping: Investigate why controller config is not applied for two of the games (flakschiessen, zweikampf) - some residual settings?
-- [ ] Mapping: Investigate why for those games also the X-Y and A-B buttons are inverted when loading mapping through system config
+- [ ] Mapping: Investigate why controller config is not applied for two of the games (flakschiessen, zweikampf) - some residual settings? (for those games also the X-Y and A-B buttons are inverted)
+- [ ] Test mapping on a new/ fresh Android device
 - [ ] Compile Mame-Mess core for Switch
 - [X] Compile Mame-Mess core for Android
 
