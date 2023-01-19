@@ -7,13 +7,13 @@ Version: 11 Jan 2023 (WIP)
   <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
 </p>
 
-Reading under Linux with standard pc controller:
+Reading under Linux with standard pc controller (48 tracks per inch, sector size 256 bytes, 16 sectors per track, MFM encoding implicit):
 
     $ setfdprm /dev/fd1 tpi=48 ssize=256 sect=16 dd ds
-    $ sdd -noerror try=5 iseek=4096 oseek=4096 if=/dev/fd1 of=im$1.img bs=256 count=1104 
+    $ sdd -noerror try=5 iseek=4096 oseek=4096 if=/dev/fd1 of=floppy.img bs=256 count=1104 
 
 Modern Options:
-    
+
 ### Controller
 
 * [Kryoflux](https://kryoflux.com/):
@@ -109,7 +109,6 @@ Should be a 360kB 40 track drive. 80 track drives might be able to read the M20 
 
 ## TODOs
 
-- [ ] What is the "tpi=48" parameter in the original approach?
 - [ ] Can the original M20 boot a floppy with a replaced track0 from a random image?
 - [ ] Can the original M20 boot images which do not work in mame? (cpm8k?)
 - [ ] Provide Feedback [here](https://gist.github.com/jandelgado/88962932896127dcabbe251f996e790e), [here](https://github.com/keirf/greaseweazle/issues/143) and [here](https://github.com/keirf/greaseweazle/issues/261)
