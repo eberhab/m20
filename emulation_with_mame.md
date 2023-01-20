@@ -93,7 +93,7 @@ Even if the whole floppy track can be read, one has to deal with an additional d
 
 When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^4]:
 
-|Track.Side| Physical floppy format | Floppy image
+|Cylinder.Side| Physical floppy format | Floppy image
 |:---|---:|:---:|
 |00.0 |FM, 16 Sectors * 128 Bytes| 16 * 256 Bytes|
 |00.1 |MFM, 16 Sectors * 256 Bytes | 16 * 256 Bytes|
@@ -116,14 +116,21 @@ The resulting image in this example was produced using pcos41a and the first byt
       00000010  ff ff 00 00 00 00 00 00  00 01 00 22 00 00 00 22  |..........."..."|
       00000020  ff ff ff ff ff ff ff ff  00 00 00 10 50 43 4f 53  |............PCOS|
 
-Track00.0 does not contain any user data (see Page 10.2 of the Italian PCOS 1.0 manual) but its content seems to depend on the PCOS version it was created with. For the purpose of using images in MAME, the track does however seem to be completely interchangeable between images. Digging further into the created image, one can notice:
+Track0 does not contain any user data (see Page 10.2 of the Italian PCOS 1.0 manual) but its content seems to depend on the PCOS version it was created with. For the purpose of using images in MAME, the track does however seem to be completely interchangeable between images. Digging further into the created image, one can notice:
 
-* Mame uses 1s instead of 0s to pad the 128 byte FM sectors. You can observe this by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
+* Mame uses 1s instead of 0s to pad the 128 byte FM sectors. This also happens during conversion using floptool. One has to keep this in mind when attempting to write images back to floppy. You can observe the padding type by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
 * Only the first 128 bytes of the image (FM sector 1 of 16) does seem to contain any non-zero information. All other sectors are empty (skip even sectors with _dd_)
-* So basically in chunks of 128 Byte, the track would have one section of data (D) then alternating zeros (0) and byte padding (1). It would look something like this: [D010101...01]
+* So basically in chunks of 128 Byte, the track would have one section of data (D) then alternating zeros (0) and byte padding (0 or 1).
 
-This leads to the conclusion that the simplest way to image floppies, is still to read the entire floppy in MFM mode, skipping track00.0 and hence already creating the correct image size needed for MAME, and then transferring the first 4 kiB (128 B actually suffice) from another image. When writing back to floppy one can apply the same procedure in reverse, by first formatting the floppy in a real M20, then copying the image by skipping track00.0.
-    
+Two examples showing different padding types, broken down into 16 pairs of 128 bytes, representing the 4 kiB track0 in a MAME compatible sector image:
+
+    D0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  - pcos20f.img
+    D1 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01  - pcos20h.img (Converted by MAME from *.imd)
+
+This leads to the conclusion that the simplest way to image floppies, is still to read the entire floppy in MFM mode, skipping track0 and hence already creating the correct image size, needed for MAME, and then transferring the first 4 kiB (128 bytes actually suffice) from another image. When writing back to floppy one can apply the same procedure in reverse, by first formatting the floppy in a real M20, then copying the image by skipping track0. This additionally avoids the risk of writing the non-zero padding from MAME back to floppy.
+
+One has to keep in mind that this does not necessarily produce reproducible results while imaging. Citing from the MAME [Guidelines for Software Lists](https://docs.mamedev.org/contributing/softlist.html#introduction): "_Ideally, it should be possible for anyone with the media to dump it and produce the same image file._" Based on this philosophy, extracting the original FM track for archiving purposes might be desirable.
+
 ### Compiling MAME from source and running older versions
 
 The latest version of MAME is the github [master branch](https://github.com/mamedev/mame). On Linux just type "make" in the checked out tree. To compile floptool etc. as well, add the "tools" argument. Compiling only the M20 driver is significantly faster and can be done by adding the "subtarget" and "sources" arguments:
