@@ -2,8 +2,8 @@
 
 | Shortname | OS | Bootable | Thumbnail | Comments |
 |:--|:--|:--|:--|:--|
-|adm51| DOS | | | |
-|adm5| DOS | | | |
+|adm51| DOS | | | It seems that this DOS image has been imaged by accidentally skipping track0. Replace it from adm5. |
+|adm5| DOS | | | Standard DOS image, load with MSDOS2.0 |
 |asm| | | | |
 |cpm8k| | | | Does not start |
 |dbms| | | ![](img/dbms.png) | |
@@ -14,7 +14,7 @@
 |isam| | | | |
 |m20graph| | | | |
 |m20utent| | | | |
-|msdos20| DOS | | | |
+|msdos20| DOS | | | Standard DOS image, run with -bios 1 |
 |multpland| | | | |
 |multplane| | | | |
 |multplan| | | | |
@@ -33,21 +33,21 @@
 |pascal| | | | |
 |pcos102| | | | |
 |pcos110d| | | | |
+|pcos13| | | | |
 |pcos13a| | | | |
 |pcos13d| | | | |
 |pcos13f| | | | |
-|pcos13| | | | |
 |pcos20f| | | | |
 |pcos20h| | | | |
+|pcos30e| | | | |
 |pcos30ea| | | | |
 |pcos30eb| | | | |
-|pcos30e| | | | |
 |pcos41a| | | | |
-|queensi| | | | |
 |queens| | | | |
+|queensi| | | | |
 |silk| | | | |
-|startrekg| | | | Character issues |
 |startrek| | | | |
+|startrekg| | | | Character issues, I do not know how to switch language to German under PCOS1 |
 
 ## GAMES
 

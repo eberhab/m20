@@ -1,35 +1,40 @@
 ﻿
 ## Reading M20 floppies with modern controllers
 
-Version: 11 Jan 2023 (WIP)
+Version: 22 Jan 2023 (WIP). Text based on Greaseweazel 1.5.dev2, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
 
 <p align="center">
   <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
 </p>
 
-Reading under Linux with standard pc controller (48 tracks per inch, sector size 256 bytes, 16 sectors per track, MFM encoding implicit):
+When reading M20 floppies under Linux with a standard pc controller (48 tracks per inch, sector size 256 bytes, 16 sectors per track, MFM) one likely has to skip the first 4 kiB/ track0, as many PC controllers cannot read the FM track:
 
     $ setfdprm /dev/fd1 tpi=48 ssize=256 sect=16 dd ds
     $ sdd -noerror try=5 iseek=4096 oseek=4096 if=/dev/fd1 of=floppy.img bs=256 count=1104 
 
-Modern Options:
+More information about setfdprm/ fdutils and the `sdd` tool can be found [here](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagereadwrite/imagereadwrite.inc). The main reason to use `sdd` over `dd` was the additional seek parameters. Nowadays, one could try to use standard `dd` directly, which seems to support iseek/ oseek by now (tbc).
 
-### Controller
+Other options, using modern USB-floppy-controllers, are also able to read the FM track:
+
+#### Controller options
 
 * [Kryoflux](https://kryoflux.com/):
 
   * Can not write *.img files back to floppy directly (need to convert to raw flux files first with e.g. the [HxC Floppy Emulator](https://hxc2001.com/download/floppy_drive_emulator/)).
-  * Mainly made for reading floppies, writing floppies is a "bonus" and not officially supported (e.g. if one needs help in the forums)
+  * Mainly made for reading floppies, writing floppies is possible, but considered a "bonus" and is not officially supported (e.g. if one needs help in the support forums)
+  * Reading M20 floppies works and is described e.g. [here](https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/).
 
-* [Greaseweazel](https://github.com/keirf/Greaseweazle/wiki):
+* [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
   * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files
   * Can even read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies
 
-#### Greaseweazel setup
+### Greaseweazel setup
 
-Setup/ Create a `diskdefs.cfg` config for M20 floppies. Use with [development](https://github.com/keirf/greaseweazle/issues/261#issuecomment-1369036593) version of greaseweazel tools or with future version > 1.5:
+Get all necessarzy parts and set up the Greaseweazel v4 according to the [documentation](https://github.com/keirf/greaseweazle/wiki/V4-Setup). Then create a `diskdefs.cfg` config for M20 floppies - available with the [development](https://github.com/keirf/greaseweazle/issues/261#issuecomment-1369036593) version of greaseweazel tools or with future version > 1.5:
 
+    # Greaseweazel v1.5.dev2 diskdefs.cfg for Olivetti M20 360 kB DD floppies (WIP)
+    
     # Full M20 floppy definition
     disk olivetti.m20
         cyls = 35
@@ -46,7 +51,7 @@ Setup/ Create a `diskdefs.cfg` config for M20 floppies. Use with [development](h
         end
     end
 
-    # M20 floppy definition for FM. Only use this with "c=0:h=0"
+    # M20 floppy definition for FM. Only use this with "c=0:h=0".
     disk olivetti.m20.fm
         cyls = 35
         heads = 2
@@ -110,20 +115,22 @@ None of the known (non-dos) images contain any data other than in the first sect
 
 ### Drive
 
-Should be a 360kB 40 track drive. 80 track drives might be able to read the M20 35 track floppies, but not write them well, due to the narrow track size.
+Should be a 360kB 40 track drive:
 
 * Teac FD-55BR: [vogons](https://vogonswiki.com/index.php/Teac_FD-55BR) or [retrocmp](https://retrocmp.de/fdd/teac/fd55_i.htm)
 * Tandon TM100-2A: [retrocmp](https://retrocmp.de/fdd/tandon/tm100-2a.htm)
 
+The newer 1.2 MB, 80 track drives might be able to read the M20 35 track floppies, but not write them well, due to the narrow track size. When reading with such a drive, one might need to pass an [additional `step=2` parameter](https://github.com/keirf/greaseweazle/wiki/Getting-Started) to the imaging software.
+
 ### Media
 
 * Use 5+1⁄4-inch DD 360 kB floppies.
-* Possible to use 720 kB QD?
-* Possible to use 1.2M HD? See [this article](https://forum.vcfed.org/index.php?threads/1-2mb-floppy-in-360kb-drive.52905/).
+* Possible to use 720 kB QD? They are supported by the M20 natively, but I have never seen such a floppy.
+* Possible to use 1.2M HD? According to [this article](https://forum.vcfed.org/index.php?threads/1-2mb-floppy-in-360kb-drive.52905/) it might be possible to re-format this media for DD for use in the M20.
 
 ## TODOs
 
-- [ ] Check the inner workings of RDM20/ teledisk/ imagedisk and how they do the FM track padding. Do we have access to the source code?
+- [ ] Check the inner workings of RDM20/ teledisk/ imagedisk and how they do the FM track padding (per sector/ track?). Do we have access to the source code? TD and IMD should be available via MAME source.
 - [ ] Can the original M20 boot a floppy with a replaced track0 from a random image?
 - [ ] Can the original M20 boot images which do not work in mame? (cpm8k?)
 - [ ] Provide Feedback [here](https://gist.github.com/jandelgado/88962932896127dcabbe251f996e790e), [here](https://github.com/keirf/greaseweazle/issues/143) and [here](https://github.com/keirf/greaseweazle/issues/261)

@@ -143,7 +143,7 @@ In order to compile a specific MAME (e.g. v0.212) version we might need to use a
     $ python3.8 -m venv venv38 && source venv38/bin/activate
     $ make -j8 SUBTARGET=m20 SOURCES=src/mame/drivers/m20.cpp
     
-I case it does not work, another options is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
+I case it does not work, another option is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
 
 ### Run MSDOS on the M20
 
@@ -152,7 +152,7 @@ On a real M20, with the 8086 addon board, you can boot an Olivetti-MsDos. This a
     $ mame m20 -bios <1, 2> -rompath . -flop1 msdos.img [-flop2 adm5.imd]
 
 When asked if you want to boot the alternative CPU (8086), press "y" to boot into Dos. The keyboard layout can then be changed with the _setlang_ command, e.g.: `A> setlang german`
-Keep in mind, that _msdos.img_ as well as the _adm5*.img_ are MSDOS images of MAME image type "pc". So they do not have an  e.g. _adm5.imd_ can be converted to a writable sector image using:
+Keep in mind, that _msdos.img_ as well as the _adm5*.img_ are MSDOS images of MAME image type "pc". So e.g. _adm5.imd_ can be converted to a writable sector image using:
 
     $ floptool flopconvert imd pc adm5.imd adm5.img
 
@@ -213,21 +213,23 @@ To work with any given system language one would need access to the emulated key
     * How to change the language/ keyboard under pcos1? 
     * Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
 
-* Known issues at the time of writing (possibly MAME related):
+* Issues/ questions at the time of writing (possibly MAME related):
     * Oliword currently causes MAME to hang with 100% cpu load, after entering date and time
     * Creating an new M20 floppy through the MAME menu causes MAME to crash
+    * Mame track0 padding '1s vs. 0s' and 'sector vs. track padding': bug or feature? Which is better? Track padding with 0s might be desirable to make it easier when writing images back to floppy.
     * Is printer support possible?
     * What is missing for the "Command+S" boottime easteregg?
 
-* Known issues at the time of writing (possibly data related):
+* Issues at the time of writing (possibly data related):
 
     * pcos20f.img: "Not enough memory to boot PCOS"
-    * pcos11d.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos13.img.
+    * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img.
+    * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Replace it from adm5.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
 
 - [ ] Create MAME romset with info on how to fix some images and how to start software
 - [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable, basdetok?)
-- [ ] Images: add pcos20h.img, oliword_de.img.bz2 is actually English not German, Oliword only runs with older mame (e.g. 0.212)
+- [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German, Oliword only runs with older mame (e.g. 0.212)
 - [ ] Update all BAS codes after basdetok is ready
 - [ ] Create "official" m20 images (en/it) for two days to race, possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
