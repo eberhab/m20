@@ -2,8 +2,10 @@
 # and: https://git.libretro.com/libretro-infrastructure/ci-templates/-/blob/master/android-make.yml
 
 ## Run this file:
-# docker build -t libretro/android libretro-build-android/
-# docker run -it -v "./tmp:/ext" libretro/android
+# docker build -t libretro/android .            # build image & mame
+# docker run -it -v ".:/ext" libretro/android   # run and mount ext dir
+# docker container list -a
+# docker cp <container-id>:/mame/mamemess_libretro_android.so .
 
 FROM openjdk:8-jdk
 
@@ -31,8 +33,7 @@ ENV ANDROID_NDK_ARM64="${NDK_ROOT}/toolchains/aarch64-linux-android-4.9/prebuilt
 ENV ANDROID_NDK_X86="${NDK_ROOT}/toolchains/x86-4.9/prebuilt/linux-x86_64"
 ENV ANDROID_NDK_X64="${NDK_ROOT}/toolchains/x86_64-4.9/prebuilt/linux-x86_64"
 ENV ANDROID_NDK_CLANG="${NDK_ROOT}/toolchains/llvm/prebuilt/linux-x86_64"
-# .libretro-android-make-arm64-v8a:
-ENV ANDROID_PLATFORM="android-arm64"
+
 # https://github.com/libretro/mame/blob/master/.gitlab-ci.yml#L183
 # .core-defs:
 ENV MAKEFILE="Makefile.libretro"
@@ -80,10 +81,21 @@ RUN wget -q -O android-sdk.zip https://dl.google.com/android/repository/commandl
  && echo y | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager "ndk;${ANDROID_NDK_LEGACY}" \
  && yes | android-sdk-linux/cmdline-tools/latest/bin/sdkmanager --licenses
 
-RUN git clone https://github.com/libretro/mame.git && cd mame && mkdir -p /ext \
+## .libretro-android-make-arm64-v8a:
+ENV ANDROID_PLATFORM="android-arm64"
+## .libretro-android-make-armeabi-v7a:
+#ENV ANDROID_PLATFORM="android-arm"
+## .libretro-android-make-x86:
+#ENV ANDROID_PLATFORM="android-x86"
+## .libretro-android-make-x86_64:
+#ENV ANDROID_PLATFORM="android-x86_64"
+
+ENV NUMPROC=5
+
+RUN pwd && git clone https://github.com/libretro/mame.git && cd mame && mkdir -p /ext \
   && make -C ${MAKEFILE_PATH} -f ${MAKEFILE} -j${NUMPROC} platform=${ANDROID_PLATFORM} \
   && if [ -f ${SUBTARGET}_libretro_android.so ]; then mv ${SUBTARGET}_libretro_android.so ${CORENAME}_libretro_android.so; fi \
   && if [ ! -f ${CORENAME}_libretro_android.so ]; then mv ${MAKEFILE_PATH}/${CORENAME}_libretro_android.so ${CORENAME}_libretro_android.so; fi \
   && if [ $STRIP_CORE_LIB -eq 1 ]; then ${ANDROID_NDK_LLVM}/bin/llvm-strip ${CORENAME}_libretro_android.so; fi \
-  && mv ${CORENAME}_libretro_android.so /ext/
+  && cp ${CORENAME}_libretro_android.so /ext/
 

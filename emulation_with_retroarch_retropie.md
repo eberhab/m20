@@ -76,7 +76,7 @@ When modifying the keys in-game through the MAME menu, the mapping will be saved
 
 	"-cfg_directory <RetroArch>/roms/m20/cfg/<game>/"
 
-The syntax of the m20.cfg system config file inside this folder is identical to the controller config and can be edited both in-game or with a text editor. Two examples are provided in the example file.
+The syntax of the m20.cfg system config file inside this folder is identical to the controller config and can be edited both in-game or with a text editor.
 
 # RetroArch on Android 
 
@@ -111,7 +111,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 5) Now it is time to start up the RetroArch app and change a few settings:
    - Activate file logging into "logs" directory, so that we know why things fail/ crash if they do:
       Settings -> Logging -> Log to File & Timestamp Log Files
-   - Activate "game focus" mode, to pass keyboard inputs directly to core:
+   - Activate "game focus" mode, to deactivate RetroArch hotkeys and pass keyboard inputs directly to core:
      - Settings -> Input -> Auto enable Game Focus
      - Settings -> Input -> Hotkeys -> Game Focus 
 

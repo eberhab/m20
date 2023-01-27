@@ -127,9 +127,7 @@ Two examples showing different padding types, broken down into 16 pairs of 128 b
     D0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  - pcos20f.img
     D1 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01  - pcos20h.img (Converted by MAME from *.imd)
 
-This leads to the conclusion that the simplest way to image floppies, is still to read the entire floppy in MFM mode, skipping track0 and hence already creating the correct image size, needed for MAME, and then transferring the first 4 kiB (128 bytes actually suffice) from another image. When writing back to floppy one can apply the same procedure in reverse, by first formatting the floppy in a real M20, then copying the image by skipping track0. This additionally avoids the risk of writing the non-zero padding from MAME back to floppy.
-
-One has to keep in mind that this does not necessarily produce reproducible results while imaging. Citing from the MAME [Guidelines for Software Lists](https://docs.mamedev.org/contributing/softlist.html#introduction): "_Ideally, it should be possible for anyone with the media to dump it and produce the same image file._" Based on this philosophy, extracting the original FM track for archiving purposes might be desirable.
+MAME seems to be way more forgiving concerning the FM track than the original machine. When writing the images back to floppy one has to be more careful. Ideally the origial FM track should be used, if it is not available one should try to use one from a matching PCOS version. (E.g. the german games/ demo disk does not boot on the original machine with the restored FM track from pcos102, but it does so with an FM track from another pcos20h from e.g. one of the oliword images).
 
 ### Compiling MAME from source and running older versions
 
