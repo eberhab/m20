@@ -12,7 +12,7 @@ When reading M20 floppies under Linux with a standard pc controller (48 tracks p
     $ setfdprm /dev/fd1 tpi=48 ssize=256 sect=16 dd ds
     $ sdd -noerror try=5 iseek=4096 oseek=4096 if=/dev/fd1 of=floppy.img bs=256 count=1104 
 
-More information about setfdprm/ fdutils and the `sdd` tool can be found [here](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagereadwrite/imagereadwrite.inc). The main reason to use `sdd` over `dd` was the additional seek parameters. Nowadays, one could try to use standard `dd` directly, which seems to support iseek/ oseek by now (tbc).
+The first 4 kiB of this image will be zero. More information about setfdprm/ fdutils and the `sdd` tool can be found [here](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagereadwrite/imagereadwrite.inc). The main reason to use `sdd` over `dd` was the additional seek parameter on the input side.
 
 Other options, using modern USB-floppy-controllers, are also able to read the FM track:
 
@@ -34,8 +34,6 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 Get all necessarzy parts and set up the Greaseweazel v4 according to the [documentation](https://github.com/keirf/greaseweazle/wiki/V4-Setup). Then create a `diskdefs.cfg` config for M20 floppies - available with the [development](https://github.com/keirf/greaseweazle/issues/261#issuecomment-1369036593) version of greaseweazel tools or with future version > 1.5:
 
     # Greaseweazel v1.5.dev2 diskdefs.cfg for Olivetti M20 360 kB DD floppies (WIP)
-    
-    # Full M20 floppy definition
     disk olivetti.m20
         cyls = 35
         heads = 2
@@ -44,29 +42,12 @@ Get all necessarzy parts and set up the Greaseweazel v4 according to the [docume
             bps = 128
             rate = 125
         end
-        tracks 0.1-34:ibm.mfm
+        tracks 0.1:ibm.mfm
             secs = 16
             bps = 256
             rate = 250
         end
-    end
-
-    # M20 floppy definition for FM. Only use this with "c=0:h=0".
-    disk olivetti.m20.fm
-        cyls = 35
-        heads = 2
-        tracks *:ibm.fm
-            secs = 16
-            bps = 128
-            rate = 125
-        end
-    end
-
-    # M20 floppy definition for MFM.
-    disk olivetti.m20.mfm
-        cyls = 35
-        heads = 2
-        tracks *:ibm.mfm
+        tracks 1-34:ibm.mfm
             secs = 16
             bps = 256
             rate = 250
@@ -75,41 +56,40 @@ Get all necessarzy parts and set up the Greaseweazel v4 according to the [docume
 
 #### Reading
 
-Reading the entire disk in one go with the mixed `olivetti.m20` format did not work yet, so we will read the FM and MFM parts separately:
+Now one has to issue only a single read command to the `gw`-tool and it will take care of handling the mixed format all by itself:
 
-* Read FM Track0 (Cylinder 0, Head 0). This will read 2 kiB, since FM density is lower.
-* Read the entire Floppy in MFM. This will attemp to re-read Track0 (and fail) but already creates a 4 kiB offset for it on the output side. It also saves us an additional step to separately read Track1 (c=0:h=1).
-* Transfer the 2 kiB FM track0 into the empty first 4 kiB of the output image. This effectively leaves another 2 kiB of zeros before track1 starts, which is what we want.
-
-Example commands:
-
-    gw read --tracks="c=0:h=0" --diskdefs diskdefs.cfg --format="olivetti.m20.fm" tmp_t0.img
-    gw read --diskdefs diskdefs.cfg --format="olivetti.m20.mfm" floppy.img
-    dd conv=notrunc if="tmp_t0.img" of="floppy.img" bs=2048 count=1
+    gw read --diskdefs diskdefs.cfg --format="olivetti.m20" floppy.img
     
-This basically follows the original approach of skipping the first 4 kiB (one MFM track) on both input and output side and having track1 start at a 4 kiB offset (instead of 2 kiB). This is however a convention, one needs to define when storing sector images in a consistent way.
+This produces an image with the size of 278 kiB. One has to keep in mind that the FM track is only 2 kiB in size, while the MFM tracks are 4 kiB. So this method produces an image file of a different size, than the original method, which skipped track0 in "MFM mode", hence resulting in a size of 280 kiB. 
 
-One use-case would be to load the images in [MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc), which also follows the convention that track1 starts with a 4 kiB offset in the sector image file. As a sidenote: Mame actually assumes [every one of the 16 sectors](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9) in the FM track to be padded with 128 Bytes, instead of padding the entire 2 kiB track with and additional 2 kiB (like we did here). Reproducing this during imaging would make the reading process more complex, since we would need to slice track0 into 16 parts à 128 bytes and pad them individually. We can however stick to the simplification, since only the [very first sector](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=100146#Post100146) in the FM track seems to contain data anayways. This is indeed the case for all known images, but one should probably keep this in mind when imaging floppies which haven't been looked at yet.
+One use-case would be to load the images in [MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc), which also follows the convention that track1 starts with a 4 kiB offset in the sector image file. In order to convert the image to the homogeneous the 4 kiB / track sizing, one needs to add an additional 2 kiB of zeros to pad the first track:
+
+    dd if=floppy.img of=floppy_mame.img bs=2048 count=1
+    dd if=floppy.img of=floppy_mame.img bs=2048 skip=1 seek=2
+
+As a sidenote: Mame actually assumes [every one of the 16 sectors](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9) in the FM track to be padded with 128 Bytes, instead of padding the entire track0 with an additional 2 kiB (like done here). Reproducing this during imaging would make the conversion process more complex, since one would need to slice track0 into 16 parts à 128 bytes and pad them individually. We can however stick to the simplification, since only the [very first sector](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=100146#Post100146) in the FM track seems to contain data anayways. Due to this, the difference between track and sector padding vanishes. This is indeed the case for all known images, but one should probably keep this in mind when imaging floppies which haven't been looked at yet.
 
 When trying to create authentic copies which can be validated by checksum (crc/ sha) one also has to keep in mind the additional data used for padding the sectors first track. While we use 0s for the padding, MAME seems to use 1s to pad the offset to the second track. Hence an image converted by MAME would result in a different checksum, allthough the user data is fully identical.
 
 #### Writing
 
-Writing back to floppy we have to do in three parts, again assuming a homogeneous 4 kiB/ track image file. Then we can write track0, track1, and the rest of the disk: 
+For writing back to floppy, again one has to take into account the padding in the original image. If it has 280 kiB/ has been used in Mame, one needs to remove the extra 2 kiB of data from track0:
 
-    gw write --tracks="c=0:h=0" --diskdefs diskdefs.cfg --format="olivetti.m20.fm" floppy.img
-    gw write --tracks="c=0:h=1" --diskdefs diskdefs.cfg --format="olivetti.m20.mfm" floppy.img
-    gw write --tracks="c=1-34" --diskdefs diskdefs.cfg --format="olivetti.m20.mfm" floppy.img
+    dd if=floppy_mame.img of=floppy.img bs=2048 count=1
+    dd if=floppy_mame.img of=floppy.img bs=2048 skip=2 seek=1
+
+The the image can be written with a single command, based on the mixed floppy composition defined in the config:
     
-Likewise, when writing, one has to keep in mind the convention used for padding the FM track data in the sector image file. If the image has previously been created/ converted in MAME, then it is possible that the padding was actually done per sector rather than per track. And since MAME uses non-zero data for the padding, in this case, it actually _does_ make a difference. One can investigate the image e.g. with dd and hexdump, by increasing the skip parameter to odd numbers:
+    gw write --diskdefs $diskdefs --format="olivetti.m20" $FN
+    
+Another MAME sidenote: Likewise, when writing, one has to keep in mind the convention used for padding the FM track data in the sector image file. If the image has previously been created/ converted in MAME, then it is possible that the padding was actually done per sector rather than per track. And since MAME uses non-zero data for the padding, in this case, it actually _does_ make a difference. One can investigate the image e.g. with dd and hexdump, by increasing the skip parameter to odd numbers:
 
     dd if=floppy.img bs=128 skip=1 count=1 |hexdump -v -C
 
-When writing back the first 2 kiB of such an image file in the way describe here, one would write some of the padding data back to the disk, which does not technically belong there. One option would again be to slice the image data up into chunks of 128 bytes and remove the padding before writing back to disk, or, if we assume that only the first sector contains data, we can construct a new header by first filling it with 2 kiB of 0s and then adding the first sector's data:
+When writing back the first 2 kiB of such an image file, in the way describe here, one would write some of the non-zero sector-padding data back to the disk, which does not technically belong there. One option would again be to slice the image data up into chunks of 128 bytes and remove the padding before writing back to disk. Alternatively, assuming again that only the first sector contains data, the conversion can also be done by only copying the first sector to the image and skipping the rest of the first track:
 
-    dd if=/dev/null of=tmp_t0.img bs=2048 count=1
-    dd conv=notrunc if="floppy.img" of="tmp_t0.img" bs=128 count=1
-    gw write --tracks="c=0:h=0" --diskdefs diskdefs.cfg --format="olivetti.m20.fm" tmp_t0.img
+    dd if=floppy_mame.img of=floppy.img bs=128 count=1
+    dd if=floppy_mame.img of=floppy.img bs=2048 skip=2 seek=1
     
 None of the known (non-dos) images contain any data other than in the first sector/ first 128 bytes, so the method should be safe to use, but better double check.
 
