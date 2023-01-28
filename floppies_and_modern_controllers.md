@@ -31,23 +31,18 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
 ### Greaseweazel setup
 
-Get all necessarzy parts and set up the Greaseweazel v4 according to the [documentation](https://github.com/keirf/greaseweazle/wiki/V4-Setup). Then create a `diskdefs.cfg` config for M20 floppies - available with the [development](https://github.com/keirf/greaseweazle/issues/261#issuecomment-1369036593) version of greaseweazel tools or with future version > 1.5:
+Get all necessarzy parts and set up the Greaseweazel v4 according to the [documentation](https://github.com/keirf/greaseweazle/wiki/V4-Setup). Then create a `diskdefs.cfg` config for M20 floppies - available since v1.6 of the greaseweazel tools:
 
-    # Greaseweazel v1.5.dev2 diskdefs.cfg for Olivetti M20 360 kB DD floppies (WIP)
+    # Greaseweazel v1.6 diskdefs.cfg for Olivetti M20 360 kB DD floppies
     disk olivetti.m20
         cyls = 35
         heads = 2
-        tracks 0.0:ibm.fm
+        tracks 0.0 ibm.fm
             secs = 16
             bps = 128
             rate = 125
         end
-        tracks 0.1:ibm.mfm
-            secs = 16
-            bps = 256
-            rate = 250
-        end
-        tracks 1-34:ibm.mfm
+        tracks * ibm.mfm
             secs = 16
             bps = 256
             rate = 250
