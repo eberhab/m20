@@ -28,6 +28,7 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
   * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files
   * Can even read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies
+  * Discussion about support FM track padding [in progress](https://github.com/keirf/greaseweazle/issues/275).
 
 ### Greaseweazel setup
 
