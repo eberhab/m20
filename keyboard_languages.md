@@ -26,3 +26,5 @@ When reading an M20 ascii file (e.g. from a floppy) in a unicode environment, th
 | German Swiss (14)      | ä | ö | ü | à | ç  | è | é | § |
 | Original German (15)   | ä | ö | ü | Ä | Ö  | Ü | ß | § |
 | Datev German (16)      | ä | ö | ü | Ä | Ö  | Ü | ß | § |
+
+(The table is WIP and not complete)
