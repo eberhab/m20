@@ -1,7 +1,7 @@
 ﻿
 ## Reading M20 floppies with modern controllers
 
-Version: 22 Jan 2023 (WIP). Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
+Version: 30 Jan 2023 (WIP). Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
 
 <p align="center">
   <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
@@ -27,8 +27,8 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
   * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files.
-  * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to img.
-  * Supports FM data padding [in progress](https://github.com/keirf/greaseweazle/issues/275) in img files.
+  * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to img (since v1.6).
+  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in img files (since v1.8).
 
 ### Greaseweazel setup
 
@@ -38,15 +38,17 @@ Now one has to issue only a single command to the `gw`-tool and it will take car
 
     gw read --format="olivetti.m20" floppy.img
     gw write --format="olivetti.m20" floppy.img
+    
+When reading with a 1.2 MB HD drive one has to pass an additional `--tracks='step=2'` parameter.
 
 This produces an image with the size of 280 kiB. One has to keep in mind that the FM track is only 2 kiB in size, while the MFM tracks are 4 kiB. The total amount of userdata is only 278 kiB. The additional 2 kiB are padding.
 
 It seems to be a de-facto standard to pad the lower density FM data to 4 kiB to achieve a homogeneous track size in the img file. This might be historically motivated. The original method of imaging with a pc controller seeked over the first track in "MFM mode", which automatically created a 4 kiB offset. This resulted in a 280 kiB file.
 
-In order to do the padding one has two options:
+In order to do the padding while also reading the FM part, one has two options:
 
 - Per track: Pad the entire track0 with an additional 2 kiB (used in many manual conversion approaches)
-- Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and GW use this)
+- Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and [GW](https://github.com/keirf/greaseweazle/issues/275) use this)
 
 Let's look into reading, writing, and padding in more detail (usually/ with gw >= v1.8 you should not need this):
 
@@ -121,7 +123,7 @@ Should be a 360kB 40 track drive:
 * Teac FD-55BR: [vogons](https://vogonswiki.com/index.php/Teac_FD-55BR) or [retrocmp](https://retrocmp.de/fdd/teac/fd55_i.htm)
 * Tandon TM100-2A: [retrocmp](https://retrocmp.de/fdd/tandon/tm100-2a.htm)
 
-The newer 1.2 MB, 80 track drives might be able to read the M20 35 track floppies, but not write them well, due to the narrow track size. When reading with such a drive, one might need to pass an [additional `step=2` parameter](https://github.com/keirf/greaseweazle/wiki/Getting-Started) to the imaging software.
+The newer 1.2 MB, 80 track HD drives are able to read the M20 35 track floppies, but might not write them well, due to the narrow track size. 
 
 ### Media
 
