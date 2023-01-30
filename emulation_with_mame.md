@@ -225,13 +225,10 @@ To work with any given system language one would need access to the emulated key
     * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Replace it from adm5.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
 
-- [ ] Create MAME romset with info on how to fix some images and how to start software
 - [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable, basdetok?)
 - [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German, Oliword only runs with older mame (e.g. 0.212)
-- [ ] Update all BAS codes after basdetok is ready
-- [ ] Create "official" m20 images (en/it) for two days to race, possible?
+- [ ] Create "official" m20 images (en/it) for "Two Days to Race", possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
-- [ ] Investigate if Oliword_de also has startup error on real M20
 
 [^1]: https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739
 [^2]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf

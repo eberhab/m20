@@ -137,9 +137,9 @@ The newer 1.2 MB, 80 track drives might be able to read the M20 35 track floppie
 
 ## TODOs
 
-- [ ] Check the inner workings of RDM20/ teledisk/ imagedisk and how they do the FM track padding (per sector/ track?). Do we have access to the source code? TD and IMD should be available via MAME source.
-- [ ] Can the original M20 boot a floppy with a replaced track0 from a random image?
-- [ ] Can the original M20 boot images which do not work in mame? (cpm8k?)
-- [ ] Provide Feedback [here](https://gist.github.com/jandelgado/88962932896127dcabbe251f996e790e), [here](https://github.com/keirf/greaseweazle/issues/143) and [here](https://github.com/keirf/greaseweazle/issues/261)
-- [ ] Interesting read: https://www.smbaker.com/raspberry-pi-floppy-controller-board
+- [ ] Check the inner workings of RDM20/ teledisk/ imagedisk and if/ how they do the FM track padding (per sector/ track?). Do we have access to the source code? TD and IMD should be available via MAME source.
+- [ ] Get cpm8k and pcos13 working on real M20. Does not boot so far. Wrong track0 replacement? Jumpers?
+- [ ] Can the original M20 use a [Gotek with FlashFloppy](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/)?
+
+
 
