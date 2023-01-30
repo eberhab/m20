@@ -79,7 +79,7 @@ Then, add the `diskdefs` parameter to the arguemnts:
 
 The `img_bps` parameter in the config file controls the target size of the sectors in the img file. By default, gw will attempt to create an equal size of 256 Bytes for all sectors, hence padding every single FM track with another 128 Bytes. 
 
-As a example, let's remove the `img_bps` parameter, which will deactivate sector padding. Subsequently we will use manual track padding, to pad the entire FM track to 4 kiB:
+As a practice example, let's remove the `img_bps` parameter, which will deactivate sector padding. Subsequently we will use manual track padding, to pad the entire FM track to 4 kiB:
 
 #### Reading
 

@@ -93,14 +93,14 @@ After setup, the basic structure inside the RetroArch folder should look like th
     ./thumbnails/m20/[Named_Boxarts, Named_Snaps, Named_Titles]/<game>.png
     ./playlists/m20.lpl
     ./saves/mame/cfg/m20.cfg  (default-sys-cfg)
-    ./download
+    ./download/mamemess_libretro_android.so
     ./logs
 
 ### Setup
 
 1) Start by installing [Retroarch](https://www.retroarch.com/?page=platform) 64 bit for Android.
    
-2) Download the "Multi (MESS - Current)" via the core downloader.
+2) Download the "Multi (MESS - Current)" via the core downloader either directly or by downloading from [buildbot](https://buildbot.libretro.com/nightly/android/latest/arm64-v8a/mamemess_libretro_android.so.zip) into the RetroArch/download folder.
 
 3) Create a subfolder "roms/m20" and put (zipped) floppy images and M20 bios/ rom inside. Make sure the images have a working/ non-empty track0.
 
@@ -111,31 +111,36 @@ After setup, the basic structure inside the RetroArch folder should look like th
 5) Now it is time to start up the RetroArch app and change a few settings:
    - Activate file logging into "logs" directory, so that we know why things fail/ crash if they do:
       Settings -> Logging -> Log to File & Timestamp Log Files
-   - Activate "game focus" mode, to deactivate RetroArch hotkeys and pass keyboard inputs directly to core:
-     - Settings -> Input -> Auto enable Game Focus
-     - Settings -> Input -> Hotkeys -> Game Focus 
 
 6) Choose input device. There are two options:
 
-	* Connect a keyboard to the Android device e.g. use an Android tablet with a bluetooth keyboard.
-	* Use the RetroPad (either on-screen, or via a real gamepad):
-		* Adding a custom key-config directory to the *.cmd file: 
-		  `-cfg_directory /storage/emulated/0/RetroArch/roms/m20/cfg/<game>`
-		* Edit the file `roms/m20/cfg/<game>/m20.cfg` and add all the mappings for the game
-		* One can let Mame create the file on first run, but the folder needs to be created first
-		* The mapping between the RetroPad and Mame can be configured via Settings -> Input -> Port Controls
-		
+* Connect a keyboard to the Android device e.g. use an Android tablet with a bluetooth keyboard.
+* Use the RetroPad (either on-screen, or via a real gamepad):
+	* Adding a custom key-config directory to the *.cmd file: 
+		`-cfg_directory /storage/emulated/0/RetroArch/roms/m20/cfg/<game>`
+	* Edit the file `roms/m20/cfg/<game>/m20.cfg` and add all the mappings for the game
+	* One can let Mame create the file on first run, but the folder needs to be created first
+	* The mapping between a physical gamepad and RetroPad can be configured via Settings -> Input -> Port 1 Controls
+
 7) Launch the emulation by:
    - Load content -> (select the *.cmd launch file)
    - When prompted, select "Arcade (MAME - Current)" core
 
 ### Optional steps
 
+* A few more helpful RetroArch settings:
+   - Activate "game focus" mode, to deactivate RetroArch hotkeys and pass keyboard inputs directly to the core:
+     - Settings -> Input -> Auto enable Game Focus (disables all hotkeys but Game Focus Toggle) 
+     - Settings -> Input -> Hotkeys -> Game Focus (Toggle)
+   - Activate slow motion mode (if the game is too fast)
+     - Define speed factor under: Settings -> Frame Throttle -> Slow-Motion Rate 
+     - Assign to hotkey: Settings -> Input -> Hotkeys -> Slow-Motion (Toggle) - 
+
 * Create a playlist to automatically associate *.zip and *.cmd files in the m20 roms folder with the mame-current core via Playlists -> Import Content -> Manual Scan:
 	* Content directory: roms/m20
-	* System name: "Content directory" or "m20"
+	* System name: "Content directory" or "Custom -> m20"
 	* Default core: "Multi (MESS - Current)"
-	* File extensions: "zip cmd"	
+	* File extensions: "zip cmd"
 
 * Add artwork under the "thumbnails" folder:
 	* Create a subfolder with the name "m20" or, if it differs, with the name of the created playlist
@@ -334,8 +339,7 @@ The period/ stop key also does not work when attaching a physical keyboard.
 ## Issues - TODOs
  
 - [ ] Finish Pacman BAS game
-- [ ] Mapping: Investigate why controller config is not applied for two of the games (flakschiessen, zweikampf) - some residual settings? (for those games also the X-Y and A-B buttons are inverted)
-- [ ] Test mapping on a new/ fresh Android device
+- [ ] Add some more games from m20graph
 - [ ] Compile Mame-Mess core for Switch
 - [X] Compile Mame-Mess core for Android
 
