@@ -26,9 +26,9 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
-  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files.
+  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files. Support for *.imd is [planned](https://github.com/keirf/greaseweazle/issues/276).
   * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to img (since v1.6).
-  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in img files (since v1.8).
+  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in img files (with v1.8), to be compatible with the file size of the original pc-controller approach.
 
 ### Greaseweazel setup
 
@@ -47,7 +47,7 @@ It seems to be a de-facto standard to pad the lower density FM data to 4 kiB to 
 
 In order to do the padding while also reading the FM part, one has two options:
 
-- Per track: Pad the entire track0 with an additional 2 kiB (used in many manual conversion approaches)
+- Per track: Pad the entire track0 with an additional 2 kiB (usually used in manual conversion approaches where FM and MFM are read separately and joined by `dd`)
 - Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and [GW](https://github.com/keirf/greaseweazle/issues/275) use this)
 
 Let's look into reading, writing, and padding in more detail (usually/ with gw >= v1.8 you should not need this):
@@ -105,7 +105,7 @@ The the image can be written with a single command, based on the mixed floppy co
     
     gw write --diskdefs diskdefs.cfg --format="olivetti.m20" floppy_unpadded.img
     
-A MAME sidenote: While we use 0s for the padding, MAME seems to use 1s to pad the sectors. If the image has previously been created/ converted in MAME one can investigate the original image e.g. with dd and hexdump. By increasing the skip parameter to odd numbers one can skip to the padding data:
+Another MAME sidenote: While we use 0s for the padding, MAME seems to use 1s to pad the sectors. If the image has previously been created/ converted in MAME one can investigate the original image e.g. with dd and hexdump. By increasing the skip parameter to odd numbers one can skip to the padding data:
 
     dd if=floppy.img bs=128 skip=1 count=1 |hexdump -v -C
 
@@ -116,6 +116,8 @@ When writing back the first 2 kiB of such a mame-created image file, one would w
     
 None of the known (non-dos) images contain any data other than in the first sector/ first 128 bytes, so the method should be safe to use, but better double check.
 
+Note: In any case, an M20 image create/ converted by MAME, will end up having a different checksum once it has been written to floppy and read back. This is simply because the padding data is different.
+
 ### Drive
 
 Should be a 360kB 40 track drive:
@@ -123,7 +125,7 @@ Should be a 360kB 40 track drive:
 * Teac FD-55BR: [vogons](https://vogonswiki.com/index.php/Teac_FD-55BR) or [retrocmp](https://retrocmp.de/fdd/teac/fd55_i.htm)
 * Tandon TM100-2A: [retrocmp](https://retrocmp.de/fdd/tandon/tm100-2a.htm)
 
-The newer 1.2 MB, 80 track HD drives are able to read the M20 35 track floppies, but might not write them well, due to the narrow track size. 
+The newer 1.2 MB, 80 track HD drives are able to read the M20 35 track floppies, but might not write them well, due to narrower track size. 
 
 ### Media
 
@@ -133,13 +135,12 @@ The newer 1.2 MB, 80 track HD drives are able to read the M20 35 track floppies,
 
 ### Reading and writing BASIC codes
 
-- m20floppy
-- basdetok
-- Make sure line breaks are single "CR"
+The resulting disk image can now be explored with the [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc) tool. When extracting BASIC codes from the floppy image, it is usually obtained in a "tokenized" form (unless saved with SAVE,A under pcos). In order to decypher the BASIC codes, one can use the "Basic De-Tokenizer for M20 - [Basdetok](https://github.com/gfis/basdetok)", to tranlate into ASCII. After conversion, the files can be modified on the host machine. The files can also be written back to the image file in ASCII format, given that there is enough space left on the floppy. When writing back, one needs to make sure that line breaks are single "CR". A helpful script to compile basdetok can be found [here](https://github.com/eberhab/m20/blob/master/scripts/install_basdetok.sh).
+
+The character set for the M20 was country dependent. A (incomplete) list to translate some of the obtained characters can be found [here](https://github.com/eberhab/m20/blob/master/keyboard_languages.md) or [here](https://github.com/eberhab/m20/blob/master/scripts/keyb_mapping_rules_sed.txt) as sed rules.
 
 ## TODOs
 
-- [ ] Check the inner workings of RDM20/ teledisk/ imagedisk and if/ how they do the FM track padding (per sector/ track?). Do we have access to the source code? TD and IMD should be available via MAME source.
 - [ ] Get cpm8k and pcos13 working on real M20. Does not boot so far. Wrong track0 replacement? Jumpers?
 - [ ] Can the original M20 use a [Gotek with FlashFloppy](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/)?
 

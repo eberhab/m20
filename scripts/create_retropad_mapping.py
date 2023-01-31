@@ -212,10 +212,9 @@ def create():
 rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
 rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
 create_controller_config = True  # Create controller config or system config?
-create_cmd_files = True
+create_cmd_files = False
 
 # Keyboard key: retropad button (All CAPS!)
-# TODO: The following games have inverted A-B, X-Y btns (why?): [flakschiessen, zweikampf]
 config = {
     'pcos20h': {
         'A': 'A',
