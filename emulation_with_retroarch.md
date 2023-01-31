@@ -80,7 +80,7 @@ The syntax of the m20.cfg system config file inside this folder is identical to 
 
 # RetroArch on Android 
 
-This guide is based on RetroArch v1.14. The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
+This guide is based on [RetroArch Arm64 v1.14](https://www.retroarch.com/?page=platform). The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
 
 The RetroArch directory on the Android device is assumed to be under: "/storage/emulated/0/RetroArch"
 After setup, the basic structure inside the RetroArch folder should look like this[^1]:
@@ -98,7 +98,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 ### Setup
 
-1) Start by installing [Retroarch](https://www.retroarch.com/?page=platform) 64 bit for Android.
+1) Start by installing [Retroarch 64 bit for Android](https://buildbot.libretro.com/stable/1.14.0/android/RetroArch_aarch64.apk). It is best to install the buildbot version since the PlayStore version  tends to be out of date.
    
 2) Download the "Multi (MESS - Current)" via the core downloader either directly or by downloading from [buildbot](https://buildbot.libretro.com/nightly/android/latest/arm64-v8a/mamemess_libretro_android.so.zip) into the RetroArch/download folder.
 

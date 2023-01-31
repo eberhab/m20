@@ -1,5 +1,7 @@
 0 REM ***1403197***250497***110123***eb***
-10 REM Pacman f}r Textmodus
+10 REM Pacman f}r Textmodus f}r den Olivetti M20
+15 REM Adaptiert von einer Version f}r QuickBasic
+16 REM von M.Nickles, Aug 91
 20 REM Initialisirung der Variablen --------------------------------------------
 30 CLEAR
 40 DEFINT A,G,I,K,N,P,R,S,Z,W

@@ -212,7 +212,7 @@ def create():
 rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
 rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
 create_controller_config = True  # Create controller config or system config?
-create_cmd_files = False
+create_cmd_files = True
 
 # Keyboard key: retropad button (All CAPS!)
 config = {
@@ -348,7 +348,7 @@ config = {
     }
 }
 
-# Can by any MAME cmd line args
+# Can be any MAME cmd line args
 extra_settings = {
     'mauerschiessen': {'speed': 0.5},
     'bruecke': {'speed': 0.7},
