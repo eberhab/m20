@@ -340,7 +340,7 @@ The period/ stop key also does not work when attaching a physical keyboard.
  
 - [ ] Finish [Pacman](https://github.com/eberhab/m20/blob/master/scripts/pacman.bas) BAS game
 - [ ] Add some more games from m20graph?
-- [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for Switch
+- [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for [Switch](https://github.com/libretro/mame/issues/344)
 - [X] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.android) Mame-Mess core for Android
 
 [^1]: https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728

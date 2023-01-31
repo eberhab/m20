@@ -1,12 +1,13 @@
-0 REM ***1403197***250497***110123***eb***
-10 REM Pacman f}r Textmodus f}r den Olivetti M20
-15 REM Adaptiert von einer Version f}r QuickBasic
-16 REM von M.Nickles, Aug 91
+0 REM  ***1403197***250497***110123***eb***
+10 REM Pacman für Textmodus für den Olivetti M20
+15 REM Basierend auf einer Version für QuickBasic von M.Nickles, Aug 91
+16 REM Adaptiert für M20 BASIC im Mrz 97
+17 REM 
 20 REM Initialisirung der Variablen --------------------------------------------
 30 CLEAR
 40 DEFINT A,G,I,K,N,P,R,S,Z,W
 50 GOSUB 2470
-60 SCORE=0        :REM Spielpunkte-Z{hler
+60 SCORE=0        :REM Spielpunkte-Zähler
 70 PZ=17
 80 PS=21 
 90 FOR I=1 TO 4:GZ(I)=11:GS(I)=18+I:NEXT I
@@ -29,12 +30,12 @@
 260 REM Spielrunde gewonnen
 270 GOSUB 880
 280 REM alle Ghosts einen Schritt bewegen
-290 FOR I=50 TO 60 STEP 2:REM Ger{usch
+290 FOR I=50 TO 60 STEP 2:REM Geräusch
 300 PRINT CHR$(7);
 310 NEXT I
 320 REM Hier bei schnellen Rechnern evt.
 330 REM Warteschleife zur herabsetzung
-340 REM der Spielgeschwindigkeit einf}gen
+340 REM der Spielgeschwindigkeit einfügen
 350 REM Warteschleife
 360 WEND
 370 REM --------------------------------
@@ -56,7 +57,7 @@
 520 REM BEWEGEPACMAN:
 530 IF KARTE(PS,PZ)=1 THEN KARTE(PS,PZ)=0:SCORE=SCORE+1:CURSOR(45,1):COLOR 0,1:PRINT"Score:",SCORE
 540 REM Wenn Pacman Punkt gefressen hat,
-550 REM dann Punktzahl um 1 erh|hen
+550 REM dann Punktzahl um 1 erhöhen
 560 IF KARTE(PS,PZ)=3 THEN GOTO ELSE 650
 570 FOR N=300 TO 310 STEP 2
 580 PRINT CHR$(7);
@@ -65,15 +66,15 @@
 610 WR=80:REM NORMWERT  80
 620 SCORE=SCORE+1
 630 REM Wenn Ghosts im Fluchtmodus, dann Wegrenn-
-640 REM Z{hler herabsetzen
+640 REM Zähler herabsetzen
 650 IF WR>0 THEN WR=WR-1
-660 REM Verhindern, da~ Pacman in Wand laufen kann
+660 REM Verhindern, daß Pacman in Wand laufen kann
 670 IF KARTE(PS+SM,PZ+ZM)=2 THEN SM=0:ZM=0
-680 REM Pr}fen ob Pacman Ghost gefressen hat
+680 REM Prüfen ob Pacman Ghost gefressen hat
 690 IF WR>1 THEN GOSUB 2050
 700 COLOR 1,0
 710 CURSOR(PS,PZ)
-720 PRINT " ":REM Pacm. l|schen
+720 PRINT " ":REM Pacm. löschen
 730 PZ=PZ+1:ZM=ZM+1:REM Pacm. Zeile
 740 PS=PS+1:SM=SM+1:REM und Spalte modifizieren
 750 IF PZ=11 AND PS=1 THEN PZ=11:PS=38
@@ -83,7 +84,7 @@
 790 REM Pacman an neuer Position setzen
 800 CURSOR(PS,PZ)
 810 PRINT CHR$(80);
-820 REM pr}fen ob pacman Ghost gefressen hat
+820 REM prüfen ob pacman Ghost gefressen hat
 830 IF WR>1 THEN GOSUB 2050
 840 RETURN
 850 REM --------------------------------
@@ -95,27 +96,27 @@
 910 IF G=1 OR G=2 THEN GSM(G)=-1 ELSE GSM(G)=1
 920 REM Ghosts 1 und 2 verlassen Zuhause nach links, 3 und 4 nach rechts
 930 GOSUB 1490
-940 REM 1. Pr}fen ob Ghost beim Weiter laufen in Mauer l{uft ------
+940 REM 1. Prüfen ob Ghost beim Weiter laufen in Mauer läuft ------
 950 MAUER=0
 960 IF KARTE(GS(G)+GSM(G),GZ(G)+GZM(G))=2 THEN MAUER=1 ELSE GOTO 1310
-970 REM 2. Pr}fen welche Richtungs{nderungen m|glich sind ---------
+970 REM 2. Prüfen welche Richtungsänderungen möglich sind ---------
 980 RU=0:RA=0:L=0:R=0
 990 IF GZM(G)=1 AND MAUER=1 AND KARTE(GS(G)-1,GZ(G))<>2 THEN RA=1
-1000 REM Ghost kann rauf, weil er gerade runter l{uft, Mauer erreicht hat, und Richtung rauf m|glich ist
+1000 REM Ghost kann rauf, weil er gerade runter läuft, Mauer erreicht hat, und Richtung rauf möglich ist
 1010 IF GZM(G)=-1 AND MAUER=1 AND KARTE(GS(G)+1,GZ(G))<>2 THEN RU=1
-1020 REM Ghost kann runter, weil er gerade rauf l{uft, Mauer erreicht hat, und Richtung runter m|glich ist
+1020 REM Ghost kann runter, weil er gerade rauf läuft, Mauer erreicht hat, und Richtung runter möglich ist
 1030 IF GSM(G)=1 AND MAUER=1 AND KARTE(GS(G),GZ(G)-1)<>2 THEN L=1
-1040 REM Ghost kann links, weil er gerade rechts l{uft, Mauer erreicht hat, und Richtung links m|glich ist
+1040 REM Ghost kann links, weil er gerade rechts läuft, Mauer erreicht hat, und Richtung links möglich ist
 1050 IF GSM(G)=-1 AND MAUER=1 AND KARTE(GS(G),GZ(G)+1)<>2 THEN R=1
-1060 REM Ghost kann rechts, weil er gerade links l{uft, Mauer erreicht hat, und Richtung rechts m|glich ist
+1060 REM Ghost kann rechts, weil er gerade links läuft, Mauer erreicht hat, und Richtung rechts möglich ist
 1070 IF GSM(G)=0 AND KARTE(GS(G),GZ(G)+1)<>2 THEN R=1
-1080 REM Ghost kann rechts, weil er gerade vertikal l{uft und Abzweigung nach rechts m|glich ist.
+1080 REM Ghost kann rechts, weil er gerade vertikal läuft und Abzweigung nach rechts möglich ist.
 1090 IF GSM(G)=0 AND KARTE(GS(G),GZ(G)-1)<>2 THEN L=1
-1100 REM Ghost kann links, weil er gerade vertikal l{uft und Abzweigung nach links m|glich ist
+1100 REM Ghost kann links, weil er gerade vertikal läuft und Abzweigung nach links möglich ist
 1110 IF GZM(G)=0 AND KARTE(GS(G)+1,GZ(G))<>2 THEN RU=1
-1120 REM Ghost kann runter, weil er gerade horizontal l{uft und Abzweigung nach unten m|glich ist
+1120 REM Ghost kann runter, weil er gerade horizontal läuft und Abzweigung nach unten möglich ist
 1130 IF GZM(G)=0 AND KARTE(GS(G)-1,GZ(G))<>2 THEN RA=1
-1140 REM Ghost kann Rauf, weil er gerade horizontal l{uft und Abzweigung nach oben m|glich ist
+1140 REM Ghost kann Rauf, weil er gerade horizontal läuft und Abzweigung nach oben möglich ist
 1150 IF WR=0 THEN 1160 ELSE 1310
 1160 RUL=0:RAL=0:LL=0:RL=0
 1170 IF RU=1 AND GZ(G)<PZ THEN RUL=1
@@ -129,7 +130,7 @@
 1250 I=INT(AZL*RND(1))+1:REM log. Richt. einschl.
 1260 RICHTUNG=LOGISCH(I)
 1270 IF AZL=0 OR ZUFALL<20 THEN 1280 ELSE 1300
-1280 I=INT(AZM*RND(1))+1:REM m|gl. Richt. einschl.
+1280 I=INT(AZM*RND(1))+1:REM mögl. Richt. einschl.
 1290 RICHTUNG=MOEGLICH(I)
 1300 GOSUB 2290
 1310 IF WR>0 THEN 1320 ELSE 1500
@@ -139,14 +140,14 @@
 1350 IF L=1 AND GS(G)<PS THEN LL=1
 1360 IF R=1 AND GS(G)>PS THEN RL=1
 1370 GOSUB 2160
-1380 REM Bei Wegrennmodus wird auf jeden Fall eine logische Richtung eingeschlagen, es sei denn es ist keine m|glich.
+1380 REM Bei Wegrennmodus wird auf jeden Fall eine logische Richtung eingeschlagen, es sei denn es ist keine möglich.
 1390 IF AZM>0 THEN 1400 ELSE 1500
 1400 IF AZL>0 THEN 1420 ELSE 1440
 1410 REM logische Richtung einschlagen
 1420 I=INT(AZL*RND(1))+1
 1430 RICHTUNG=LOGISCH(I)
 1440 IF AZL=0 THEN 1460 ELSE 1480
-1450 REM m|gliche Richtung einschlagen
+1450 REM mögliche Richtung einschlagen
 1460 I=INT(AZM*RND(1))+1
 1470 RICHTUNG=MOEGLICH(I)
 1480 GOSUB 2290
@@ -158,14 +159,14 @@
 1540 IF KARTE(GS(G),GZ(G))=0 THEN COLOR 0,0:PRINT" "
 1550 IF KARTE(GS(G),GZ(G))=3 THEN COLOR 1,0:PRINT"*"
 1560 IF KARTE(GS(G),GZ(G))=2 THEN COLOR 1,1:PRINT" "
-1570 REM Pr}fen, ob Pacman erwischt wurde
+1570 REM Prüfen, ob Pacman erwischt wurde
 1580 GOSUB 1770
 1590 REM Ghost Zeile und Spalte modifizieren
 1600 GZ(G)=GZ(G)+1:GZM(G)=GZM(G)+1
 1610 GS(G)=GS(G)+1:GSM(G)=GSM(G)+1
 1620 IF GZ(G)=11 AND GS(G)=1 THEN GZ(G)=11:GS(G)=38:REM Tunnel links
 1630 IF GZ(G)=11 AND GS(G)=39 THEN GZ(G)=11:GS(G)=2:REM Tunnel rechts
-1640 REM Pr}fen ob Pacman erwischt wurde
+1640 REM Prüfen ob Pacman erwischt wurde
 1650 GOSUB 1770
 1660 IF WR>0 THEN COLOR 0,1:ELSE COLOR 1,0
 1670 IF WR>0 AND WR<20 THEN 1680 ELSE 1700
@@ -214,7 +215,7 @@
 2100 GS(I)=18
 2110 NEXT I
 2120 RETURN
-2130 REM M|gliche Bewegungsrichtungen erfassen
+2130 REM Mögliche Bewegungsrichtungen erfassen
 2140 REM MOEGLICHKEITEN:
 2150 REM Hilfsdefinition:Rauf=1, Runter=2, Links=3, Rechts=4
 2160 AZM=0:AZL=0
