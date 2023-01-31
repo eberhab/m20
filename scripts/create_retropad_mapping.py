@@ -154,8 +154,9 @@ def port_cfg(kbd_key, pad_btn):
 
 def create_cmd(game, cmd_file, config_path, cmd_path):
     # create a cmd launch file
-    global extra_settings, rom_path, create_controller_config
+    global extra_settings, rom_paths, create_controller_config, target_system
     
+    rom_path = rom_paths[target_system]
     if not os.path.exists(cmd_path):
         os.makedirs(cmd_path)
     with open(cmd_file, 'w') as f:
@@ -168,14 +169,14 @@ def create_cmd(game, cmd_file, config_path, cmd_path):
         else:
             f.write(f'-cfg_directory {rom_path}/{config_path}/{game}/ ')
         f.write(f'-rompath {rom_path} ')
-        f.write(f'-flop1 {rom_path}/{game}.zip\n')
+        f.write(f'-flop1 {rom_path}/{game.split("_")[0]}.zip\n')
 
 def create():
     # Create config and cmd launch files for alle games
-    global config, create_controller_config, create_cmd_files
+    global config, create_controller_config, create_cmd_files, target_system
 
     config_path = 'cfg' # A relative directory inside the roms directory
-    cmd_path = 'cmd' # A relative local directory
+    cmd_path = 'cmd_' + target_system # A relative local directory
     for game, cfg in config.items():
         if create_controller_config:
             # controller config
@@ -209,12 +210,20 @@ def create():
 
 ### GAME SETTINGS ###
 
-rom_path = '/home/pi/RetroPie/roms/m20' # e.g. RetroPie
-rom_path = '/storage/emulated/0/RetroArch/roms/m20' # e.g. RetroArch on Android
-create_controller_config = True  # Create controller config or system config?
+rom_paths = {
+    'retropie': '/home/pi/RetroPie/roms/m20',
+    'android':  '/storage/emulated/0/RetroArch/roms/m20'
+}
+
+target_system = 'android'
+#target_system = 'retropie'
+create_controller_config = True  # Create controller config (True) or system config (False)?
 create_cmd_files = True
 
 # Keyboard key: retropad button (All CAPS!)
+# Adding an underscore to the game name considers this entry an alias definition
+# E.g. "bruecke_switch" being an alternate definition for the game "bruecke"
+# To be played with the Switch JoyConds
 config = {
     'pcos20h': {
         'A': 'A',
@@ -238,6 +247,19 @@ config = {
         'O': 'A-RIGHT',
         'P': 'A-DOWN'
     },
+    'olioids': {
+        '1_PAD': 'L1',
+        '2_PAD': ['DOWN', 'A-DOWN', 'R1'],
+        '4_PAD': ['LEFT', 'A-LEFT'],
+        '6_PAD': ['RIGHT', 'A-RIGHT'],
+        '8_PAD': ['UP', 'A-UP'],
+        'Z': 'START',
+        'N': 'SELECT',
+        'F': 'A',
+        'A': 'B',
+        'SPACE': 'Y',
+        'ENTER': 'X'
+    },
     'flakschiessen': {
         'SPACE': ['A', 'B'],
         'J': 'START'
@@ -250,6 +272,15 @@ config = {
         '2': ['R2', 'UP'],
         'STOP': ['L1', 'DOWN'],
         '0': ['R1', 'RIGHT']
+    },
+    'bruecke_switch': {
+        'ENTER': 'X',
+        'SPACE': 'A',
+        'J': 'START',
+        '1': ['L1', 'LEFT'],
+        '2': ['R1', 'UP'],
+        'STOP': ['L2', 'DOWN'],
+        '0': ['R2', 'RIGHT']
     },
     'mauerschiessen': {
         'SPACE': ['A', 'X'],
