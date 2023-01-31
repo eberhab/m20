@@ -338,7 +338,7 @@ The period/ stop key also does not work when attaching a physical keyboard.
 
 ## Issues - TODOs
  
-- [ ] Finish Pacman BAS game
+- [ ] Finish [Pacman](https://github.com/eberhab/m20/blob/master/scripts/pacman.bas) BAS game
 - [ ] Add some more games from m20graph?
 - [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for Switch
 - [X] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.android) Mame-Mess core for Android
