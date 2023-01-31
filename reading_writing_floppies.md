@@ -139,6 +139,18 @@ The resulting disk image can now be explored with the [m20floppy](http://www.z80
 
 The character set for the M20 was country dependent. A (incomplete) list to translate some of the obtained characters can be found [here](https://github.com/eberhab/m20/blob/master/keyboard_languages.md) or [here](https://github.com/eberhab/m20/blob/master/scripts/keyb_mapping_rules_sed.txt) as sed rules.
 
+Example for reading a basic file from an IMG originally created with a West German charset:
+
+    m20 floppy.img get program 
+    basdetok -m20 program |tr "\r" "\n" |sed '{s/{/ä/g;s/|/ö/g;s/}/ü/g;s/\[/Ä/g;s/\\/Ö/g;s/]/Ü/g;s/~/ß/g;s/@/§/g}' > program.bas 
+
+Now `program.bas` can be edited and writing back to the image:
+
+    cat program.bas |tr "\n" "\r" |tr -d "\n" | sed '{s/ä/{/g;s/ö/|/g;s/ü/}/g;s/Ä/\[/g;s/Ö/\\/g;s/Ü/]/g;s/ß/~/g;s/§/@/g}' > program 
+    m20 floppy.img put program
+    
+Then write the image back to floppy or run with [MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc).
+
 ## TODOs
 
 - [ ] Get cpm8k and pcos13 working on real M20. Does not boot so far. Wrong track0 replacement? Jumpers?
