@@ -118,7 +118,7 @@ The resulting image in this example was produced using pcos41a and the first byt
 
 Track0 does not contain any user data (see Page 10.2 of the Italian PCOS 1.0 manual) but its content seems to depend on the PCOS version it was created with. For the purpose of using images in MAME, the track does however seem to be completely interchangeable between images. Digging further into the created image, one can notice:
 
-* Mame uses 1s instead of 0s to pad the 128 byte FM sectors. This also happens during conversion using floptool. One has to keep this in mind when attempting to write images back to floppy. You can observe the padding type by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
+* Mame uses 1s instead of 0s to pad the 128 byte FM sectors. This also happens during conversion using floptool. One has to keep this in mind when attempting to write images back to floppy, or when comparing checksums! You can observe the padding type by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
 * Only the first 128 bytes of the image (FM sector 1 of 16) does seem to contain any non-zero information. All other sectors are empty (skip even sectors with _dd_)
 * So basically in chunks of 128 Byte, the track would have one section of data (D) then alternating zeros (0) and byte padding (0 or 1).
 

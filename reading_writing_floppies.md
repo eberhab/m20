@@ -26,8 +26,8 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
-  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files. Support for *.imd is [planned](https://github.com/keirf/greaseweazle/issues/276).
-  * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to img (since v1.6).
+  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files. Support for *.imd is [coming with v1.8](https://github.com/keirf/greaseweazle/issues/276).
+  * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to sector formats (since v1.6).
   * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in img files (with v1.8), to be compatible with the file size of the original pc-controller approach.
 
 ### Greaseweazel setup
@@ -48,9 +48,9 @@ It seems to be a de-facto standard to pad the lower density FM data to 4 kiB to 
 In order to do the padding while also reading the FM part, one has two options:
 
 - Per track: Pad the entire track0 with an additional 2 kiB (usually used in manual conversion approaches where FM and MFM are read separately and joined by `dd`)
-- Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and [GW](https://github.com/keirf/greaseweazle/issues/275) use this)
+- Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and [GW](https://github.com/keirf/greaseweazle/issues/275) use this).
 
-Let's look into reading, writing, and padding in more detail (usually/ with gw >= v1.8 you should not need this):
+ Alternatively it is also possible to write into IMD files, which is a somewhat "smarter" image format, supporting per-sector metadata. Padding is only done in IMG files, since they are plain sector representations of the floppy. Let's look into reading, writing, and padding in more detail (usually one you should not need this):
 
 ### Manual config and padding options
 
@@ -77,7 +77,7 @@ Then, add the `diskdefs` parameter to the arguemnts:
 
     gw read --diskdefs diskdefs.cfg --format="olivetti.m20" floppy.img
 
-The `img_bps` parameter in the config file controls the target size of the sectors in the img file. By default, gw will attempt to create an equal size of 256 Bytes for all sectors, hence padding every single FM track with another 128 Bytes. 
+The `img_bps` parameter in the config file controls the target size of the sectors in the IMG file. By default, gw will attempt to create an equal size of 256 Bytes for all sectors, hence padding every single FM track with another 128 Bytes. 
 
 As a practice example, let's remove the `img_bps` parameter, which will deactivate sector padding. Subsequently we will use manual track padding, to pad the entire FM track to 4 kiB:
 
