@@ -82,7 +82,7 @@ The syntax of the m20.cfg system config file inside this folder is identical to 
 
 # RetroArch on Android 
 
-This guide is based on [RetroArch Arm64 v1.14](https://www.retroarch.com/?page=platform). The "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. 
+This guide is based on [RetroArch Arm64 v1.14](https://www.retroarch.com/?page=platform). The current version of the "Multi (MESS - Current)" core is based on MAME v0.251 and available from the online core downloader. Note that it is best to install the (linked) buildbot version of the app, since the PlayStore version tends to be out of date (and e.g. not list the MESS core).
 
 The RetroArch directory on the Android device is assumed to be under: "/storage/emulated/0/RetroArch"
 After setup, the basic structure inside the RetroArch folder should look like this[^1]:
@@ -100,7 +100,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 ### Setup
 
-1) Start by installing [Retroarch 64 bit for Android](https://buildbot.libretro.com/stable/1.14.0/android/RetroArch_aarch64.apk). It is best to install the buildbot version since the PlayStore version  tends to be out of date.
+1) Start by installing [Retroarch 64 bit for Android](https://buildbot.libretro.com/stable/1.14.0/android/RetroArch_aarch64.apk). 
    
 2) Download the "Multi (MESS - Current)" via the core downloader either directly or by downloading from [buildbot](https://buildbot.libretro.com/nightly/android/latest/arm64-v8a/mamemess_libretro_android.so.zip) into the RetroArch/download folder.
 
@@ -118,11 +118,10 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 * Connect a keyboard to the Android device e.g. use an Android tablet with a bluetooth keyboard.
 * Use the RetroPad (either on-screen, or via a real gamepad):
-	* Adding a custom key-config directory to the *.cmd file: 
-		`-cfg_directory /storage/emulated/0/RetroArch/roms/m20/cfg/<game>`
-	* Edit the file `roms/m20/cfg/<game>/m20.cfg` and add all the mappings for the game
-	* One can let Mame create the file on first run, but the folder needs to be created first
-	* The mapping between a physical gamepad and RetroPad can be configured via Settings -> Input -> Port 1 Controls
+	* For the mapping between RetroPad and MAME add a custom controller config to the *.cmd file: 
+		`-ctrlrpath <RetroArch>/roms/m20/cfg/ -ctrlr <game>`
+	* Then edit the file `<RetroArch>/roms/m20/cfg/<game>.cfg` and add all the needed M20 keyboard mappings for the game
+	* The mapping between a physical gamepad and RetroPad can additionally be configured via Settings -> Input -> Port 1 Controls
 
 7) Launch the emulation by:
    - Load content -> (select the *.cmd launch file)
@@ -143,13 +142,16 @@ After setup, the basic structure inside the RetroArch folder should look like th
 	* System name: "Content directory" or "Custom -> m20"
 	* Default core: "Multi (MESS - Current)"
 	* File extensions: "zip cmd"
+	* It possibly makes sense to add two different playlists for plain `zip` files and custom `cmd` files, so one can distinguish between the two if they have the same filename.
 
 * Add artwork under the "thumbnails" folder:
 	* Create a subfolder with the name "m20" or, if it differs, with the name of the created playlist
 	* Inside, place the thumbnails into subfolders: Named_Boxarts, Named_Snaps, and/ or Named_Titles
 	* Name thumbnails by game (image file-) name
 
-* Place a modified [hash table](https://github.com/mamedev/mame/blob/master/hash/m20.xml) under "system/mame/hash/m20.xml" to load zipped images directly.
+* Add a modified [hash table](https://github.com/mamedev/mame/blob/master/hash/m20.xml).
+	* Add new roms/ games, to enable loading them directly/ without the need to create a cmd file.
+	* Place modified hash file under "system/mame/hash/m20.xml"
 
 * Use autoboot to perform actions automatically (e.g. start a game on a multi-game floppy). While this is possible, it is quite fiddly and depends on a few things:
 	* The floppy needs to autoboot into an Italian PCOS (for more details, see the main [MAME article](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc))
@@ -160,7 +162,8 @@ After setup, the basic structure inside the RetroArch folder should look like th
 ### Related work
 
 * Create [Android64 MESS core](https://github.com/libretro/mame/pull/342) and related [info file](https://github.com/libretro/libretro-super/pull/1706)
-* Add a more complete [gamelist](https://github.com/mamedev/mame/pull/10832) to MAME
+* Suggest adding a Mame-Mess core for [Switch](https://github.com/libretro/mame/issues/344)
+* Improving/ Cleaning up the current MAME [rom list for the M20](https://github.com/mamedev/mame/pull/10832)
 
 # RetroArch on RetroPie
 
