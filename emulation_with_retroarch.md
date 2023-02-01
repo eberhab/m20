@@ -70,13 +70,15 @@ This will make mame expect a "\<game>.cfg" file inside the given cfg-directory. 
 		<newseq type="standard">KEYCODE_SPACE OR JOYCODE_1_BUTTON2</newseq></port>
     </input>
 
-Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. Examples for some games are provided in `m20_retropad_mapping.zip` and have been created with this [script](https://github.com/eberhab/m20/blob/master/scripts/create_retropad_mapping.py). For a complete overview of M20 key names in MAME scroll to the bottom of this file.
+Similar key mappings can be defined for other keys. Taking e.g. the pong clone "Mauerschießen" as an example, we need the keys "0", "2" (down, up), and "space" (start), and "j" (restart), which is the minimum requirement. For a complete overview of M20 key names in MAME scroll to the bottom of this file.
+
+Examples for some games are provided in `m20_retropad_mapping.zip`. A python script is provided to create/ change mappings: [create_retropad_mapping.py](https://github.com/eberhab/m20/blob/master/scripts/create_retropad_mapping.py).
 
 When modifying the keys in-game through the MAME menu, the mapping will be saved in a _system config_ file called `m20.cfg`. If one wants to keep those settings on a per game basis, instead of the ctrlrpath and ctrlr arguments, one can supply the cfg_directory argument, to have the system-config stored in a separate location e.g.:
 
 	"-cfg_directory <RetroArch>/roms/m20/cfg/<game>/"
 
-The syntax of the m20.cfg system config file inside this folder is identical to the controller config and can be edited both in-game or with a text editor.
+The syntax of the m20.cfg system config file inside this folder is identical to the controller config and can be edited both in-game or with a text editor. 
 
 # RetroArch on Android 
 

@@ -152,9 +152,9 @@ def port_cfg(kbd_key, pad_btn):
     s += '</newseq></port>'
     return s
 
-def create_cmd(game, cmd_file, config_path, cmd_path):
+def create_cmd(game, cmd_file, config_path, cmd_path, target_system):
     # create a cmd launch file
-    global extra_settings, rom_paths, create_controller_config, target_system
+    global extra_settings, rom_paths, create_controller_config
     
     rom_path = rom_paths[target_system]
     if not os.path.exists(cmd_path):
@@ -171,10 +171,11 @@ def create_cmd(game, cmd_file, config_path, cmd_path):
         f.write(f'-rompath {rom_path} ')
         f.write(f'-flop1 {rom_path}/{game.split("_")[0]}.zip\n')
 
-def create():
+def create(target_system: str):
     # Create config and cmd launch files for alle games
-    global config, create_controller_config, create_cmd_files, target_system
+    global config, create_controller_config, create_cmd_files
 
+    print(f"## {target_system.upper()}")
     config_path = 'cfg' # A relative directory inside the roms directory
     cmd_path = 'cmd_' + target_system # A relative local directory
     for game, cfg in config.items():
@@ -197,7 +198,7 @@ def create():
         if create_cmd_files:
             cmd_file = f'{cmd_path}/{game}.cmd'
             print(f'Writing {cfg_file} and {cmd_file} ...')
-            create_cmd(game, cmd_file, config_path, cmd_path)
+            create_cmd(game, cmd_file, config_path, cmd_path, target_system)
         else:
             print(f'Writing {cfg_file} ...')
 
@@ -214,39 +215,17 @@ rom_paths = {
     'retropie': '/home/pi/RetroPie/roms/m20',
     'android':  '/storage/emulated/0/RetroArch/roms/m20'
 }
-
-target_system = 'android'
-#target_system = 'retropie'
-create_controller_config = True  # Create controller config (True) or system config (False)?
+# Create controller config (True) or system config (False)?
+create_controller_config = True
+# Create cmd files pointing at rom_path along with keyboard config?
 create_cmd_files = True
 
-# Keyboard key: retropad button (All CAPS!)
-# Adding an underscore to the game name considers this entry an alias definition
-# E.g. "bruecke_switch" being an alternate definition for the game "bruecke"
-# To be played with the Switch JoyConds
+# Per game config
+# Adding an underscore to the game name considers this entry an
+# alias definition: e.g. "bruecke_switch" being an alternate definition
+# for the game "bruecke" To be played with the Switch JoyConds
+# 'game name': {'keyboard key': 'retropad button'} (All CAPS!)
 config = {
-    'pcos20h': {
-        'A': 'A',
-        'B': 'B',
-        'X': 'X',
-        'Y': 'Y',
-        '1': 'L1',
-        '2': 'R1',
-        '3': 'L2',
-        '4': 'R2',
-        '5': 'L3',
-        '6': 'R3',
-        'T': 'SELECT',
-        'Z': 'START',
-        'Q': 'UP',
-        'W': 'LEFT',
-        'E': 'RIGHT',
-        'R': 'DOWN',
-        'U': 'A-UP',
-        'I': 'A-LEFT',
-        'O': 'A-RIGHT',
-        'P': 'A-DOWN'
-    },
     'olioids': {
         '1_PAD': 'L1',
         '2_PAD': ['DOWN', 'A-DOWN', 'R1'],
@@ -375,7 +354,9 @@ config = {
         '4': ['LEFT', 'A-LEFT'],
         '6': ['RIGHT', 'A-RIGHT'],
         '8': ['UP', 'A-UP'],
-        'SPACE': 'A'
+        'SPACE': 'A',
+        'J': 'START',
+        'N': 'SELECT'
     }
 }
 
@@ -392,4 +373,5 @@ extra_settings = {
 ### RUN ###
 
 validate()
-create()
+for target_system in rom_paths.keys():
+    create(target_system)
