@@ -26,9 +26,9 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
-  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) *.img files. Support for *.imd is [coming with v1.8](https://github.com/keirf/greaseweazle/issues/276).
+  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) IMG files. Support for IMD is [coming with v1.8](https://github.com/keirf/greaseweazle/issues/276).
   * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to sector formats (since v1.6).
-  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in img files (with v1.8), to be compatible with the file size of the original pc-controller approach.
+  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in IMG files (with v1.8), to be compatible with the file size of the original pc-controller approach.
 
 ### Greaseweazel setup
 
@@ -50,7 +50,7 @@ In order to do the padding while also reading the FM part, one has two options:
 - Per track: Pad the entire track0 with an additional 2 kiB (usually used in manual conversion approaches where FM and MFM are read separately and joined by `dd`)
 - Per sector: Pad every single FM sector with an additional 128 Bytes ([MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) and [GW](https://github.com/keirf/greaseweazle/issues/275) use this).
 
- Alternatively it is also possible to write into IMD files, which is a somewhat "smarter" image format, supporting per-sector metadata. Padding is only done in IMG files, since they are plain sector representations of the floppy. Let's look into reading, writing, and padding in more detail (usually one you should not need this):
+ Alternatively it is also possible to write directly into IMD files, which is a somewhat "smarter" image format, supporting per-sector metadata. Padding is only done in IMG files, since they are plain sector representations of the floppy. Let's look into reading, writing, and padding in more detail (usually one you should not need this):
 
 ### Manual config and padding options
 
@@ -135,7 +135,7 @@ The newer 1.2 MB, 80 track HD drives are able to read the M20 35 track floppies,
 
 ### Reading and writing BASIC codes
 
-The resulting disk image can now be explored with the [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc) tool. When extracting BASIC codes from the floppy image, it is usually obtained in a "tokenized" form (unless saved with SAVE,A under pcos). In order to decypher the BASIC codes, one can use the "Basic De-Tokenizer for M20 - [Basdetok](https://github.com/gfis/basdetok)", to tranlate into ASCII. After conversion, the files can be modified on the host machine. The files can also be written back to the image file in ASCII format, given that there is enough space left on the floppy. When writing back, one needs to make sure that line breaks are single "CR". A helpful script to compile basdetok can be found [here](https://github.com/eberhab/m20/blob/master/scripts/install_basdetok.sh).
+An IMG disk image can now be explored with the [m20floppy](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagehandle/imagehandle.inc) tool. When extracting BASIC codes from the floppy image, it is usually obtained in a "tokenized" form (unless saved with SAVE,A under pcos). In order to decypher the BASIC codes, one can use the "Basic De-Tokenizer for M20 - [Basdetok](https://github.com/gfis/basdetok)", to tranlate into ASCII. After conversion, the files can be modified on the host machine. The files can also be written back to the image file in ASCII format, given that there is enough space left on the floppy. When writing back, one needs to make sure that line breaks are single "CR". A helpful script to compile basdetok can be found [here](https://github.com/eberhab/m20/blob/master/scripts/install_basdetok.sh).
 
 The character set for the M20 was country dependent. A (incomplete) list to translate some of the obtained characters can be found [here](https://github.com/eberhab/m20/blob/master/keyboard_languages.md) or [here](https://github.com/eberhab/m20/blob/master/scripts/keyb_mapping_rules_sed.txt) as sed rules.
 

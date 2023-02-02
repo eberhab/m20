@@ -57,7 +57,7 @@ MAME supports reading multiple floppy image formats: mfi (MAME floppy image), im
 
 | mfi | m20 | imd | td0 |
 |:---:|:------------:|:---:|:---:|
-| yes | [since v0.212](https://github.com/mamedev/mame/pull/5445) | no | no |
+| yes | [since v0.212](https://github.com/mamedev/mame/pull/5445) | [no](https://github.com/mamedev/mame/blob/mame0251/src/lib/formats/imd_dsk.cpp#L644) | [no](https://github.com/mamedev/mame/blob/mame0251/src/lib/formats/td0_dsk.cpp#L1028) |
 
 MAME supplies a [tool](https://docs.mamedev.org/tools/floptool.html) for converting between these different formats, with the same limitations for write support. The following will convert an ImageDisk floppy image into a writable M20 sector image:
 
@@ -118,7 +118,7 @@ The resulting image in this example was produced using pcos41a and the first byt
 
 Track0 does not contain any user data (see Page 10.2 of the Italian PCOS 1.0 manual) but its content seems to depend on the PCOS version it was created with. For the purpose of using images in MAME, the track does however seem to be completely interchangeable between images. Digging further into the created image, one can notice:
 
-* Mame uses 1s instead of 0s to pad the 128 byte FM sectors. This also happens during conversion using floptool. One has to keep this in mind when attempting to write images back to floppy, or when comparing checksums! You can observe the padding type by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
+* Mame uses [0xff](https://github.com/mamedev/mame/blob/mame0251/src/tools/image_handler.cpp#L311) instead of 0x00 to pad the 128 byte FM sectors. This also happens during conversion using floptool. One has to keep this in mind when attempting to write images back to floppy, or when comparing checksums! You can observe the padding type by increasing the skip parameter in the _dd_-command above (skip uneven sectors).
 * Only the first 128 bytes of the image (FM sector 1 of 16) does seem to contain any non-zero information. All other sectors are empty (skip even sectors with _dd_)
 * So basically in chunks of 128 Byte, the track would have one section of data (D) then alternating zeros (0) and byte padding (0 or 1).
 
