@@ -19,7 +19,7 @@
 90 ALEB=3     :REM Anzahl der Pacman-Leben
 105 GOSUB 2470:REM Labyrinth initialisieren
 110 GOSUB 2800:REM Labyrinth zeichnen
-120 GOSUB 2360:REM Anzeige d. Spielleben (2360 oder 2410)
+120 GOSUB 2410:REM Anzeige d. Spielleben (2360 oder 2410)
 130 COLOR 1,0:CURSOR(PS,PZ):PRINT CP$;:REM Pacman setzen
 150 FOR I=1 TO 4:GZ(I)=11:GS(I)=18+I:NEXT I:REM Ghosts setzen
 160 FOR I=1 TO 4:COLOR 1,0:CURSOR(GS(I),GZ(I)):PRINT CG$;:NEXT I
@@ -27,12 +27,12 @@
 170 REM -------------------------------------------------------------
 180 REM HAUPTSTEUERUNG:
 190 WHILE SCORE<351
-195 GOSUB 2360:REM Anzeige Punkte und Spielleben (2360 oder 2410)
+195 GOSUB 2410:REM Anzeige Punkte und Spielleben (2360 oder 2410)
 210 GOSUB 390 :REM Steuertasten abfragen
 230 GOSUB 530 :REM Pacman einen Schritt bewegen
 240 GOSUB 880 :REM Alle Ghosts einen Schritt bewegen
 250 IF SCORE=351 THEN GOTO 2920:REM Spielrunde gewonnen
-251 IF SCORE MOD 50=0 THEN GOSUB 2800:REM Labyrinth neu zeichnen
+251 REM IF SCORE MOD 50=0 THEN GOSUB 2800:REM Labyrinth neu zeichnen
 290 REM FOR I=50 TO 60 STEP 2:PRINT CHR$(7);:NEXT I
 320 REM Hier bei schnellen Rechnern evt.
 330 REM Warteschleife zur herabsetzung
@@ -63,6 +63,7 @@
 620 SCORE=SCORE+1
 630 REM Wenn Ghosts im Fluchtmodus, dann Wegrennzähler herabsetzen
 650 IF WR>0 THEN WR=WR-1 ELSE CG$="G"
+651 IF WR>0 AND WR<10 THEN CG$="D"
 660 REM Verhindern, daß Pacman in Wand laufen kann
 670 IF KARTE(PS+SM,PZ+ZM)=2 THEN SM=0:ZM=0
 680 REM Prüfen ob Pacman Ghost gefressen hat
@@ -90,23 +91,27 @@
 930 GOTO 1490
 940 REM 1. Prüfen ob Ghost beim Weiter laufen in Mauer läuft
 950 MAUER=0
-960 IF KARTE(GS(G)+GSM(G),GZ(G)+GZM(G))=2 THEN MAUER=1
+951 RU=0:RA=0:L=0:R=0
+960 IF KARTE(GS(G)+GSM(G),GZ(G)+GZM(G))=2 THEN MAUER=1 ELSE 1070
 970 REM 2. Prüfen welche Richtungsänderungen möglich sind
-980 RU=0:RA=0:L=0:R=0
 1000 IF GZM(G)=1  AND MAUER=1 AND KARTE(GS(G),GZ(G)-1)<>2 THEN RA=1
 1010 IF GZM(G)=-1 AND MAUER=1 AND KARTE(GS(G),GZ(G)+1)<>2 THEN RU=1
 1030 IF GSM(G)=1  AND MAUER=1 AND KARTE(GS(G)-1,GZ(G))<>2 THEN L=1
 1050 IF GSM(G)=-1 AND MAUER=1 AND KARTE(GS(G)+1,GZ(G))<>2 THEN R=1
 1070 IF GSM(G)=0  AND KARTE(GS(G)+1,GZ(G))<>2 THEN R=1
 1090 IF GSM(G)=0  AND KARTE(GS(G)-1,GZ(G))<>2 THEN L=1
+1091 IF GSM(G)=1  AND KARTE(GS(G)+1,GZ(G))<>2 THEN R=1
+1092 IF GSM(G)=-1 AND KARTE(GS(G)-1,GZ(G))<>2 THEN L=1
 1110 IF GZM(G)=0  AND KARTE(GS(G),GZ(G)+1)<>2 THEN RU=1
 1130 IF GZM(G)=0  AND KARTE(GS(G),GZ(G)-1)<>2 THEN RA=1
+1131 IF GZM(G)=1  AND KARTE(GS(G),GZ(G)+1)<>2 THEN RU=1
+1132 IF GZM(G)=-1 AND KARTE(GS(G),GZ(G)-1)<>2 THEN RA=1
 1150 IF WR=0 THEN 1160 ELSE 1310
 1160 RUL=0:RAL=0:LL=0:RL=0
-1170 IF RU=1 AND GZ(G)<PZ THEN RUL=1
-1180 IF RA=1 AND GZ(G)>PZ THEN RAL=1
-1190 IF L=1  AND GS(G)>PS THEN LL=1
-1200 IF R=1  AND GS(G)<PS THEN RL=1
+1170 IF RU=1 AND GZ(G)<=PZ THEN RUL=1
+1180 IF RA=1 AND GZ(G)>=PZ THEN RAL=1
+1190 IF L=1  AND GS(G)>=PS THEN LL=1
+1200 IF R=1  AND GS(G)<=PS THEN RL=1
 1210 GOSUB 2160
 1220 IF AZM>0 THEN 1230 ELSE 1310
 1230 ZUFALL=INT(100*RND(1))+1
@@ -119,10 +124,10 @@
 1300 GOSUB 2290
 1310 IF WR>0 THEN 1320 ELSE 1490
 1320 RUL=0:RAL=0:LL=0:RL=0
-1330 IF RU=1 AND GZ(G)>PZ THEN RUL=1
-1340 IF RA=1 AND GZ(G)<PZ THEN RAL=1
-1350 IF L=1  AND GS(G)<PS THEN LL=1
-1360 IF R=1  AND GS(G)>PS THEN RL=1
+1330 IF RU=1 AND GZ(G)>=PZ THEN RUL=1
+1340 IF RA=1 AND GZ(G)<=PZ THEN RAL=1
+1350 IF L=1  AND GS(G)<=PS THEN LL=1
+1360 IF R=1  AND GS(G)>=PS THEN RL=1
 1370 GOSUB 2160
 1380 REM Bei Wegrennmodus wird auf jeden Fall eine logische Richtung eingeschlagen, es sei denn es ist keine möglich.
 1390 IF AZM>0 THEN 1400 ELSE 1490
@@ -147,7 +152,7 @@
 1540 IF KARTE(GS(G),GZ(G))=0 THEN COLOR 0,0:PRINT" "
 1550 IF KARTE(GS(G),GZ(G))=3 THEN COLOR 1,0:PRINT"*"
 1560 IF KARTE(GS(G),GZ(G))=2 THEN COLOR 1,1:PRINT" "
-1561 REM GOSUB 2980:REM Only for MAME
+1561 GOSUB 2980:REM Only for MAME
 1570 REM Prüfen, ob Pacman erwischt wurde
 1580 GOSUB 1770
 1590 REM Ghost Zeile und Spalte modifizieren
@@ -240,6 +245,7 @@
 2410 CURSOR(45,1):COLOR 0,1:PRINT "Punkte:          ";
 2411 CURSOR(54,1):COLOR 0,1:PRINT SCORE
 2412 CURSOR(45,2):COLOR 1,0:FOR I=1 TO ALEB-1:PRINT CP$;" ";:NEXT I
+2413 IF ADFF>0 THEN PRINT" (";ADFF;")"
 2420 RETURN
 2430 REM Labyrinth --------------------------------------------------
 2440 REM LABYRINTH:
@@ -293,23 +299,21 @@
 2915 REM Endroutine -------------------------------------------------
 2920 COLOR 1,0:CLS:CURSOR(10,12):PRINT"Willst Du noch ein Spielchen wagen? (J/N):"
 2930 CURSOR(55,12):G$=INKEY$:IF G$="" THEN 2930
-2940 IF G$="j" OR G$="J" THEN ADFF=ADFF+1:GOTO 30
+2940 IF G$="j" OR G$="J" THEN IF ADFF<20 THEN ADFF=ADFF+1
+2941 GOTO 30
 2950 IF G$="n" OR G$="N" THEN CHAIN "0:hmenu":END
 2960 GOTO 2930
 2970 END
 2983 REM  ENDE ------------------------------------------------------
 2974 REM --- DEBUG --- DEBUG --- DEBUG ---
-2975 REM Stelle Feld um den Ghost wieder her ------------------------
+2975 REM Stelle Feld um Ghost und Pacman wieder her ------------------------
 2976 REM Nur um Grafikfehler im Emulator auszugleichen
-2980 FOR I=-1 TO 1
-2981 FOR J=-1 TO 1
-2982 RZ=GZ(G)+I:RS=GS(G)+J:GOSUB 2990
-2983 NEXT J
-2984 NEXT I
+2980 RZ=GZ(G):RS=GS(G)+1
 2990 CURSOR(RS,RZ)
 2991 IF KARTE(RS,RZ)=0 THEN COLOR 0,0:PRINT" "
 2992 IF KARTE(RS,RZ)=1 THEN COLOR 1,0:PRINT"."
 2993 IF KARTE(RS,RZ)=2 THEN COLOR 0,1:PRINT" "
 2994 IF KARTE(RS,RZ)=3 THEN COLOR 1,0:PRINT"*"
+2995 IF KARTE(PS+1,PZ)=2 THEN CURSOR(PS+1,PZ):COLOR 0,1:PRINT" "
 3000 RETURN 
 
