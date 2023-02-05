@@ -14,11 +14,11 @@ Above is the iconic game "Mauerschießen", a pong clone from the German demo flo
 Running the M20 on Retroarch can be useful for a number of reasons: Retroach is being built for a vast number of platforms (like Android, the Nintendo Switch, and even Win95) for which there is no pre-compiled Mame option. RetroArch also offers some additional features, like snapshots, effectively introducing a "save game" function. While RetroArch is just the frame, it contains MAME as a "core".
 
 The goal of this article is to get M20 emulation running on RetroArch, and map some keys of simple 1D and 2D games to the RetroArch virtual gamepad "RetroPad", so they can be played without a keyboard. Data provided with this article:
-
+<!--  -->
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7217045 | 5633ad79 |
-|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 336860 | 05c142fd |
+|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7182831 | c1d56cec |
+|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 1089744 | fdde389c |
 
 #### Loading floppy images in a non-keyboard environment
 

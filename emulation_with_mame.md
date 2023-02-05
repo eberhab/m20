@@ -14,8 +14,8 @@ Data provided with this article:
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Romset | m20_roms.zip | xxx | xxx |
-|Olivetti M20 - Source code of all BAS games | m20_code.zip | 192370 | 9ee4e53a |
+|Olivetti M20 - MAME Romset | m20_roms.zip | 5770767 | 1745a327 |
+|Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
 
