@@ -13,12 +13,12 @@ Above is the iconic game "Mauerschießen", a pong clone from the German demo flo
 
 Running the M20 on Retroarch can be useful for a number of reasons: Retroach is being built for a vast number of platforms (like Android, the Nintendo Switch, and even Win95) for which there is no pre-compiled Mame option. RetroArch also offers some additional features, like snapshots, effectively introducing a "save game" function. While RetroArch is just the frame, it contains MAME as a "core".
 
-The goal of this article is to get M20 emulation running on RetroArch, and map some keys of simple 1D and 2D games to the RetroArch virtual gamepad "RetroPad", so they can be played without a keyboard. Data provided with this article:
+The goal of this article is to get M20 emulation running on RetroArch, and map some keys of simple 1D and 2D games to the RetroArch virtual gamepad "RetroPad", so they can be played without a keyboard. Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0Vok8a?dl=0) with this article:
 <!--  -->
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
 |Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7182831 | c1d56cec |
-|Retropad controller mapping configs | [m20_retropad_mapping.zip](article_media/m20_retropad_mapping.zip) | 1089744 | fdde389c |
+|Retropad controller mapping configs | m20_retropad_mapping.zip | 1089744 | fdde389c |
 
 #### Loading floppy images in a non-keyboard environment
 
@@ -89,13 +89,11 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
     ./roms/m20/m20.zip  (bios)
     ./roms/m20/<game>.zip  (rom)
-    ./roms/m20/cfg/<game>/m20.cfg  (sys-cfg)
     ./roms/m20/cfg/<game>.cfg  (ctrlr-cfg)
     ./system/mame/hash/m20.xml  (softlist)
     ./thumbnails/m20/[Named_Boxarts, Named_Snaps, Named_Titles]/<game>.png
     ./playlists/m20.lpl
     ./saves/mame/cfg/m20.cfg  (default-sys-cfg)
-    ./download/mamemess_libretro_android.so
     ./logs
 
 ### Setup
@@ -167,9 +165,9 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 # RetroArch on RetroPie
 
-RetroPie is more versatile than pure RetroArch, so setup is also a bit more complex, with the advantage, that an up to date MAME core is readily available, as well as stand alone MAME.
+RetroPie is more versatile than pure RetroArch, so setup is also a bit more complex. It offers a few more handy rom loading options beyond softlists and individual _cmd_ files. Standalone MAME is also available.
 
-This guide is based on 32bit RetroPie 4.8, RetroArch v1.12, incl. MAME v0.251 running on a Raspberry Pi 4B (8GB). At the time of writing, there is no pre-built 64bit SD card image available. While RetroPie 64bit can be installed manually on Raspberry Pi OS, it is no guaranteed that things will behave identical to what is described here.  
+This guide is based on 32bit RetroPie 4.8, RetroArch v1.12, incl. MAME v0.251 running on a Raspberry Pi 4B (8GB). At the time of writing, there is no pre-built 64bit SD card image available. While RetroPie 64bit can be installed manually on Raspberry Pi OS, it is not guaranteed that things will behave identical to what is described here.  
 
 The RetroPie directory structure should eventually look like this:
 
@@ -188,13 +186,13 @@ This guide will explain roughly which files needed to modify and provide a gener
 
 ### Setup
 
-1) Boot a 32bit RetroPie 4.8 on a Raspberry Pi 4
+1) [Flash](https://retropie.org.uk/download/) a 32bit RetroPie 4.8 on a Raspberry Pi 4
 
 2)  Install M20 support on Retropie:  
 
     * Install  `mame`  and  `lr-mess`  from  `RetroPie-Setup`  (experimental packages).  
 
-3) Configure new emulator types in  `/opt/retropie/configs/m20/emulators.cfg`. Emulators are rule-sets for command line parameter to the emulator core. Use the mame/ lr-mess emulator configs as a reference. Some examples:
+3) Configure new emulator types in  `/opt/retropie/configs/m20/emulators.cfg`. Emulators are rule-sets for command line parameters to the emulator core. They can automate rom loading with arguments and thus replace the need to create indiviual, per game _cmd_ files. Use the mame/ lr-mess emulator configs as a reference. Some emulator example definitions:
 
 	* lr-mess-cmd: Use to launch cmd files
 	* lr-mess-m20-manual: Launch non-softlisted roms by passing image and floppy type to mame
@@ -342,9 +340,7 @@ The period/ stop key also does not work when attaching a physical keyboard.
 	L SHIFT    - LSHIFT      - :kbd:m20:MODIFIERS - 8 
 
 ## Issues - TODOs
- 
-- [ ] Finish [Pacman](https://github.com/eberhab/m20/blob/master/scripts/pacman.bas) BAS game
-- [ ] Add some more games from m20graph?
+
 - [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for [Switch](https://github.com/libretro/mame/issues/344)
 - [X] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.android) Mame-Mess core for Android
 

@@ -1,7 +1,7 @@
 ﻿
 ## Reading M20 floppies with modern controllers
 
-Version: 30 Jan 2023 (WIP). Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
+Version: 6 Feb 2023. Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
 
 <p align="center">
   <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>
@@ -26,9 +26,9 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
 
-  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) IMG files. Support for IMD is [coming with v1.8](https://github.com/keirf/greaseweazle/issues/276).
+  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) IMG and [IMD](https://github.com/keirf/greaseweazle/issues/276) files.
   * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to sector formats (since v1.6).
-  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in IMG files (with v1.8), to be compatible with the file size of the original pc-controller approach.
+  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in IMG files ([since v1.8](https://github.com/keirf/greaseweazle/releases/tag/v1.8)), to be compatible with the file size of the original pc-controller approach.
 
 ### Greaseweazel setup
 
@@ -92,7 +92,7 @@ This produces an image with the size of 278 kiB. In order to convert the image t
     dd if=floppy_unpadded.img of=floppy.img bs=2048 count=1
     dd if=floppy_unpadded.img of=floppy.img bs=2048 skip=1 seek=2
 
-As a sidenote: Mame actually assumes [every one of the 16 sectors](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9) in the FM track to be padded with 128 Bytes, instead of padding the entire track0 with an additional 2 kiB (like done here). The resulting track-padded image can however still be loaded into MAME, since only the [very first sector](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=100146#Post100146) in the FM track on the floppies seems to contain data anayways. Due to this, the difference between track and sector padding vanishes.
+As a sidenote: Mame actually assumes [every one of the 16 sectors](https://github.com/mamedev/mame/blob/mame0251/src/lib/formats/m20_dsk.cpp#L11) in the FM track to be padded with 128 Bytes, instead of padding the entire track0 with an additional 2 kiB (like done here). The resulting track-padded image can however still be loaded into MAME, since only the [very first sector](https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=100146#Post100146) in the FM track on the floppies seems to contain data anayways. Due to this, the difference between track and sector padding vanishes.
 
 #### Writing
 
@@ -120,7 +120,7 @@ Note: In any case, an M20 image create/ converted by MAME, will end up having a 
 
 ### Drive
 
-Should be a 360kB 40 track drive:
+Should be a 360kB 40 track drive. Options include:
 
 * Teac FD-55BR: [vogons](https://vogonswiki.com/index.php/Teac_FD-55BR) or [retrocmp](https://retrocmp.de/fdd/teac/fd55_i.htm)
 * Tandon TM100-2A: [retrocmp](https://retrocmp.de/fdd/tandon/tm100-2a.htm)

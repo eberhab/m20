@@ -10,7 +10,7 @@ Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.o
   <img src="article_media/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
 </p>
 
-Data provided with this article:
+Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0Vok8a?dl=0) with this article:
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
@@ -89,7 +89,7 @@ When writing BASIC code in ASCII back to the img, one has to make sure, that the
 
 The original M20 stored data on the physical floppy in two different encodings. Part of the first track has data encoded in FM, while the rest of the floppy was encoded in MFM. PC floppy controllers usually do not understand the FM encoding, so reading of this section was often skipped during imaging.
 
-Even if the whole floppy track can be read, one has to deal with an additional difficulty: FM tracks are 16 sectors * 128 Bytes (= 2048 Bytes) in size, while MFM encoded track size is 16 sectors * 256 Bytes (= 4096 Bytes). To simplify handling of the image file, MAME on the other hand assumes _all_ sectors to be of [equal 256 Byte size](https://github.com/mamedev/mame/blob/master/src/lib/formats/m20_dsk.cpp#L9). 
+Even if the whole floppy track can be read, one has to deal with an additional difficulty: FM tracks are 16 sectors * 128 Bytes (= 2048 Bytes) in size, while MFM encoded track size is 16 sectors * 256 Bytes (= 4096 Bytes). To simplify handling of the image file, MAME on the other hand assumes _all_ sectors to be of [equal 256 Byte size](https://github.com/mamedev/mame/blob/mame0251/src/lib/formats/m20_dsk.cpp#L11). 
 
 When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^4]:
 
@@ -141,7 +141,7 @@ In order to compile a specific MAME (e.g. v0.212) version we might need to use a
     $ python3.8 -m venv venv38 && source venv38/bin/activate
     $ make -j8 SUBTARGET=m20 SOURCES=src/mame/drivers/m20.cpp
     
-I case it does not work, another option is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
+In case it does not work, another option is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
 
 ### Run MSDOS on the M20
 
@@ -214,19 +214,18 @@ To work with any given system language one would need access to the emulated key
 * Issues/ questions at the time of writing (possibly MAME related):
     * Oliword currently causes MAME to hang with 100% cpu load, after entering date and time
     * Creating an new M20 floppy through the MAME menu causes MAME to crash
-    * Mame track0 padding '1s vs. 0s' and 'sector vs. track padding': bug or feature? Which is better? Track padding with 0s might be desirable to make it easier when writing images back to floppy.
     * Is printer support possible?
     * What is missing for the "Command+S" boottime easteregg?
 
 * Issues at the time of writing (possibly data related):
-
     * pcos20f.img: "Not enough memory to boot PCOS"
     * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img.
-    * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Replace it from adm5.
-    * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics (settings issue?).
+    * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Broken.
+    * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics.
 
-- [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable, basdetok?)
-- [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German, Oliword only runs with older mame (e.g. 0.212)
+- [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable)
+- [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German
+- [ ] Oliword only runs with older mame (e.g. 0.212)
 - [ ] Create "official" m20 images (en/it) for "Two Days to Race", possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
 
