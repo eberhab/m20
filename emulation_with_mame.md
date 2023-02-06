@@ -67,14 +67,15 @@ Alternatively, for a bit of PCOS practice, load the image to be converted and an
 
 On linux:
 
-    $ mame m20 -rompath . -flop1 pcos30e.imd -flop2 copy_pcos102.img
+    $ mame m20 -rompath . -flop1 pcos30e.imd -flop2 copy_of_pcos102.img
 
-On PCOS, copy flop2 (1:) over flop1 (0:):
+On PCOS, format flop2 (1:) and copy flop1 (0:) over flop2:
 
     # system
-    0> vc 1: 0:
+    0> vf 1:
+    0> vc 0: 1:
 
-It is also possible to create a completely new image from the MAME in-game menu. However at the time of this writing, this seems only still be possible for _*.mfi_ images.
+Instead of loading an existing image into flop2, it is also possible to create a completely new image from the MAME in-game menu. However at the time of this writing, it seems to only still be possible to create new _*.mfi_ images.
 
 ### Reading and writing BASIC files from images
 
