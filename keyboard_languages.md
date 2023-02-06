@@ -29,4 +29,6 @@ When reading an M20 ascii file (e.g. from a floppy) in a unicode environment, th
 
 (The table is WIP and not complete)
 
+Interestingly, two of these characters are part of the BASIC programming language ("\\" is used as integer division, "@" is used as a prefix for call by reference variables). On the original machine, these characters must also be replaced by their corresponding national counterpart. As an example: On the German machine's keyboard, there is no Backslash, in order to perform an integer divisin of e.g. 10\3, one has to write "10Ö3".
+
 - [ ] Figure out more key mappings

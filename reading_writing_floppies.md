@@ -116,7 +116,7 @@ When writing back the first 2 kiB of such a mame-created image file, one would w
     
 None of the known (non-dos) images contain any data other than in the first sector/ first 128 bytes, so the method should be safe to use, but better double check.
 
-Note: In any case, an M20 image create/ converted by MAME, will end up having a different checksum once it has been written to floppy and read back. This is simply because the padding data is different.
+Note: In any case, an M20 image created/ converted by MAME, will end up having a different checksum once it has been written to floppy and read back. This is simply because the padding data is different.
 
 ### Drive
 
@@ -144,7 +144,7 @@ Example for reading a basic file from an IMG originally created with a West Germ
     m20 floppy.img get program 
     basdetok -m20 program |tr "\r" "\n" |sed '{s/{/ä/g;s/|/ö/g;s/}/ü/g;s/\[/Ä/g;s/\\/Ö/g;s/]/Ü/g;s/~/ß/g;s/@/§/g}' > program.bas 
 
-Now `program.bas` can be edited and writing back to the image:
+Now `program.bas` can be edited and written back to the image:
 
     cat program.bas |tr "\n" "\r" |tr -d "\n" | sed '{s/ä/{/g;s/ö/|/g;s/ü/}/g;s/Ä/\[/g;s/Ö/\\/g;s/Ü/]/g;s/ß/~/g;s/§/@/g}' > program 
     m20 floppy.img put program
