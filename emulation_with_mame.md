@@ -95,11 +95,11 @@ Even if the whole floppy track can be read, one has to deal with an additional d
 When reading the original floppy in MFM mode and skipping the first track, this automatically results in the correct 4 KiB offset in the image file. When imaging a real floppy including the FM track, however, one has to pad every single FM sector with another 128 Bytes. Table adapted from[^4]:
 
 |Cylinder.Side| Physical floppy format | Floppy image
-|:---|---:|:---:|
+|:---|---:|---:|
 |00.0 |FM, 16 Sectors * 128 Bytes| 16 * 256 Bytes|
 |00.1 |MFM, 16 Sectors * 256 Bytes | 16 * 256 Bytes|
 |01-34.0-1| MFM, 16 Sectors * 256 Bytes | 16 * 256 Bytes|
-|(Sum)|284672 Bytes|286720 Bytes|
+|(Sum)|278 kiB|280 kiB|
 
 Instead of extracting from floppy, another option to create a new first track, with PCOS on MAME itself. Booting with a PCOS image in drive0, then create and format a new floppy in drive1:
 
