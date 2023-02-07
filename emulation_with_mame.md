@@ -63,7 +63,7 @@ MAME supplies a [tool](https://docs.mamedev.org/tools/floptool.html) for convert
 
     $ floptool flopconvert imd m20 floppy1.imd floppy1.img
  
-Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. One of the two images needs to be a system disk in slot0, be able to boot into PCOS, and contain the _vcopy_ tool (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)[^2]). Both images also needs a correct track0 as described above, which is usually the case for the _*.imd_ and _*.td0_ images. Then boot PCOS and copy the source image over to the target image.
+Alternatively, for a bit of PCOS practice, load the image to be converted and an existing image in the target format into the emulator. The method is limited to that the image to be converted needs to be a bootable PCOS image containing the _vformat_ and _vcopy_ tools (see [M20 PCOS and BASIC command reference](http://www.z80ne.com/m20/index.php?argument=sections/manuals/manuals.inc)[^2]). This method will also take care of fixing a missing track0 in the target image. Boot PCOS format, and copy the source image over to the target image:
 
 On linux:
 
@@ -72,8 +72,8 @@ On linux:
 On PCOS, format flop2 (1:) and copy flop1 (0:) over flop2:
 
     # system
-    0> vf 1:
-    0> vc 0: 1:
+    > vf 1:
+    > vc 0: 1:
 
 Instead of loading an existing image into flop2, it is also possible to create a completely new image from the MAME in-game menu. However at the time of this writing, it seems to only still be possible to create new _*.mfi_ images.
 
