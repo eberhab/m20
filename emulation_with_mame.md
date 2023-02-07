@@ -14,7 +14,7 @@ Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0V
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Romset | m20_roms.zip | 5770767 | 1745a327 |
+|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5770767 | 1745a327 |
 |Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
@@ -27,7 +27,7 @@ To get started right away, download ROM data and floppy images into a local dire
 
     $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 0] [-cfg_directory ~/.mame/cfg] [-window]
 
-This puts the rom into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
+This puts the floppy image into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
 
 Depending on the ROM file, the following M20 bios versions are supported:
 * 1.0 (-bios 0)
