@@ -9,9 +9,9 @@ This guide highlights the particularities of running the M20 MAME driver on Retr
   <img src="article_media/retropad.jpg" alt="Mauerschießen running on Android RetroArch" width="700px"/>
 </p>
 
-Above is the iconic game "Mauerschießen", a pong clone from the German demo floppy running on Android RetroArch, playable entirely by gamepad. The necessary keys have been mapped to the controller.
+Above is the iconic game "Mauerschießen", a pong clone from the German demo floppy running on Android RetroArch, playable entirely by gamepad. The necessary keyboard keys have been mapped to the controller.
 
-Running the M20 on Retroarch can be useful for a number of reasons: Retroach is being built for a vast number of platforms (like Android, the Nintendo Switch, and even Win95) for which there is no pre-compiled Mame option. RetroArch also offers some additional features, like snapshots, effectively introducing a "save game" function. While RetroArch is just the frame, it contains MAME as a "core".
+Running the M20 on Retroarch can be useful for a number of reasons: Retroach is being built for a vast number of platforms (like Android, the Nintendo Switch, and even Win95) for which there is no pre-compiled Mame option. RetroArch also offers some additional features, like slow down, speed up, and snapshots, effectively introducing a "save game" function. While RetroArch is just the frame, it contains MAME as a "core".
 
 The goal of this article is to get M20 emulation running on RetroArch, and map some keys of simple 1D and 2D games to the RetroArch virtual gamepad "RetroPad", so they can be played without a keyboard. Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0Vok8a?dl=0) with this article:
 <!--  -->
@@ -29,7 +29,7 @@ On a PC one can call MAME with a number of custom arguments from a console. In R
 
 #### The M20 softlist in MAME
 
-In order to use the softlist loading method, add entries to the [hash table](https://github.com/mamedev/mame/blob/master/hash/m20.xml)/ softlist. The listed images can be started directly from the app, without having to create a *.cmd file. A few notes about the xml:
+In order to use the softlist loading method, add entries to the [hash table](https://github.com/mamedev/mame/blob/master/hash/m20.xml)/ softlist. When placing the file in the local installation, the listed images can be started directly from the app, without having to create a *.cmd file. A few notes about the xml:
 
 * "software  name" is the name of the zipped image
 * "rom  name" is the name of the image file inside the zip
@@ -98,7 +98,7 @@ After setup, the basic structure inside the RetroArch folder should look like th
 
 ### Setup
 
-1) Start by installing [Retroarch 64 bit for Android](https://buildbot.libretro.com/stable/1.14.0/android/RetroArch_aarch64.apk). 
+1) Start by installing [Retroarch 64 bit for Android](https://buildbot.libretro.com/stable/1.14.0/android/RetroArch_aarch64.apk). Once downloaded, refresh/ update the "Core Info Files".
    
 2) Download the "Multi (MESS - Current)" via the core downloader either directly or by downloading from [buildbot](https://buildbot.libretro.com/nightly/android/latest/arm64-v8a/mamemess_libretro_android.so.zip) into the RetroArch/download folder.
 
