@@ -341,7 +341,7 @@ The period/ stop key also does not work when attaching a physical keyboard.
 
 ## Issues - TODOs
 
-- [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for [Switch](https://github.com/libretro/mame/issues/344)
+- [ ] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.libnx) Mame-Mess core for [Swi](https://github.com/libretro/mame/issues/111)[tch](https://github.com/libretro/mame/issues/344)
 - [X] [Compile](https://github.com/eberhab/m20/blob/master/scripts/Dockerfile.android) Mame-Mess core for Android
 
 [^1]: https://forums.libretro.com/t/guide-play-non-arcade-systems-with-mame-or-mess/17728

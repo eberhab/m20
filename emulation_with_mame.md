@@ -14,18 +14,18 @@ Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0V
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5770767 | 1745a327 |
+|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471750 | 271e37fe |
 |Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
 
 After installing MAME, one needs to separately download the M20's ROM contents, e.g. [_m20.zip_](https://wowroms.com/en/roms/mame/olivetti-l1-m20/89051.html). For legal reasons, most ROMs are [not included](https://wiki.mamedev.org/index.php/FAQ:ROMs) in MAME.
 
-Secondly, one needs a floppy to boot from. Floppy disk images of different types can be loaded. Those can be: dd/ sdd/ rdm20 *.img (M20 floppy-sector-dumps), Teledisk *.td0, or ImageDisk *.imd files, as found in the [disk images section](http://www.z80ne.com/m20/index.php?argument=sections/download/wrm20/wrm20.inc). Single images will only work if they have bootable content (e.g. Olivetti's M20 operating system PCOS). A good entry point is _pcos102.img_. 
+Secondly, one needs a floppy to boot from. Floppy disk images of different types can be loaded. Those can be: dd/ sdd/ rdm20 *.img (M20 floppy-sector-dumps), Teledisk *.td0, or ImageDisk *.imd files, as found in the [disk images section](http://www.z80ne.com/m20/index.php?argument=sections/download/wrm20/wrm20.inc). Single images will only work if they have bootable content (e.g. Olivetti's M20 operating system PCOS). A good entry point is _pcos102.img_. Images can also be loaded in zipped format. Multipled images belonging to a package can be in one zip file an are specified by number, e.g. "pascal.zip:1".
 
 To get started right away, download ROM data and floppy images into a local directory and from within, run:
 
-    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 0] [-cfg_directory ~/.mame/cfg] [-window]
+    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 0] [-ramsize 512k] [-window]
 
 This puts the floppy image into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
 
@@ -33,6 +33,8 @@ Depending on the ROM file, the following M20 bios versions are supported:
 * 1.0 (-bios 0)
 * 2.0d (-bios 1)
 * 2.0f (-bios 2)
+
+Note that some images might need more RAM to work and thus need the additional `ramsize` argument, while others (e.g. PCOS1) prefer the default setting of 160 k. M20 specific command line arguments can be explored [here](https://arcade.vastheman.com/minimaws/machine/m20), while a complete list of general MAME related arguments can be found [here](https://docs.mamedev.org/commandline/commandline-all.html).
 
 Not all images are running with MAME right away. Some are missing another kind of boot information, which was stored in track0 of the original floppy, but was lost during the [imaging process](http://www.z80ne.com/m20/index.php?argument=sections/transfer/imagereadwrite/imagereadwrite.inc). This is actually the case with most _rdm20/ *.img_ disk images in the disc images section. Unless fixed, these floppies will usually not boot (or boot only partially in MAME), nor work in the second drive.
 
@@ -144,16 +146,20 @@ In order to compile a specific MAME (e.g. v0.212) version we might need to use a
     
 In case it does not work, another option is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
 
-### Run MSDOS on the M20
+### Run MSDOS and CP/M on the M20
 
-On a real M20, with the 8086 addon board, you can boot an Olivetti-MsDos. This also works with MAME, by selecting bios >=1 and the _msdos.img_ floppy image from the disk images section.
+On a real M20, with the 8086 addon board, you can boot an Olivetti-[MS-Dos 2.0](https://en.wikipedia.org/wiki/MS-DOS#MS-DOS_2.x). This also works with MAME, by selecting bios >=1 and the _msdos.img_ floppy image from the disk images section.
 
     $ mame m20 -bios <1, 2> -rompath . -flop1 msdos.img [-flop2 adm5.imd]
 
-When asked if you want to boot the alternative CPU (8086), press "y" to boot into Dos. The keyboard layout can then be changed with the _setlang_ command, e.g.: `A> setlang german`
+When asked if you want to boot the alternative CPU (8086), press "y" ("z") to boot into Dos. The keyboard layout can then be changed with the _setlang_ command, e.g.: `A> setlang german`
 Keep in mind, that _msdos.img_ as well as the _adm5*.img_ are MSDOS images of MAME image type "pc". So e.g. _adm5.imd_ can be converted to a writable sector image using:
 
     $ floptool flopconvert imd pc adm5.imd adm5.img
+    
+In order to boot [CP/M](https://en.wikipedia.org/wiki/CP/M) on the M20, I had to adjust the ramsize, otherwise CP/M boots into a black screen:
+
+    $ mame m20 -rompath . -ramsize 512k -flop1 cpm8k.img
 
 ### Connecting to the M20 serial interface
 
@@ -219,7 +225,6 @@ To work with any given system language one would need access to the emulated key
     * What is missing for the "Command+S" boottime easteregg?
 
 * Issues at the time of writing (possibly data related):
-    * pcos20f.img: "Not enough memory to boot PCOS"
     * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img.
     * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Broken.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics.

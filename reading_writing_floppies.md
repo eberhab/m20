@@ -151,9 +151,8 @@ Now `program.bas` can be edited and written back to the image:
     
 Then write the image back to floppy or run with [MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc).
 
-## TODOs
+## Questions and TODOs
 
-- [ ] Get cpm8k and pcos13 working on real M20. Does not boot so far. Wrong track0 replacement? Jumpers?
 - [ ] Can the original M20 use a [Gotek with FlashFloppy](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/)?
 
 
