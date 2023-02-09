@@ -25,14 +25,14 @@ Secondly, one needs a floppy to boot from. Floppy disk images of different types
 
 To get started right away, download ROM data and floppy images into a local directory and from within, run:
 
-    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 1] [-ramsize 512k] [-window] [-nomouse]
+    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios m20-20d] [-ramsize 512k] [-window] [-nomouse]
 
 This puts the floppy image into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
 
 Depending on the ROM file, the following M20 bios versions are supported:
-* 1.0 (-bios 0) (default)
-* 2.0d (-bios 1)
-* 2.0f (-bios 2)
+* 1.0 (-bios m20) (default)
+* 2.0d (-bios m20-20d)
+* 2.0f (-bios m20-20f)
 
 Note that some images might need more RAM to work and thus need the additional `ramsize` argument, while others (e.g. PCOS1) prefer the default setting of 160 k. M20 specific command line arguments can be explored [here](https://arcade.vastheman.com/minimaws/machine/m20), while a complete list of general MAME related arguments can be found [here](https://docs.mamedev.org/commandline/commandline-all.html).
 
