@@ -17,7 +17,7 @@ The goal of this article is to get M20 emulation running on RetroArch, and map s
 <!--  -->
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7182831 | c1d56cec |
+|Olivetti M20 - games, thumbnails, MAME hash table | m20_games.zip | 7182871 | c8e858bf |
 |Retropad controller mapping configs | m20_retropad_mapping.zip | 1089744 | fdde389c |
 
 #### Loading floppy images in a non-keyboard environment

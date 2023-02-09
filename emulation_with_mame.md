@@ -14,7 +14,7 @@ Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0V
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471750 | 271e37fe |
+|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471750 | e6c9874b |
 |Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
@@ -25,12 +25,12 @@ Secondly, one needs a floppy to boot from. Floppy disk images of different types
 
 To get started right away, download ROM data and floppy images into a local directory and from within, run:
 
-    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 0] [-ramsize 512k] [-window]
+    $ mame m20 -rompath . -flop1 <image1> [-flop2 <image2>] [-bios 1] [-ramsize 512k] [-window] [-nomouse]
 
 This puts the floppy image into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
 
 Depending on the ROM file, the following M20 bios versions are supported:
-* 1.0 (-bios 0)
+* 1.0 (-bios 0) (default)
 * 2.0d (-bios 1)
 * 2.0f (-bios 2)
 
@@ -219,7 +219,8 @@ To work with any given system language one would need access to the emulated key
     * Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
 
 * Issues/ questions at the time of writing (possibly MAME related):
-    * Oliword currently causes MAME to hang with 100% cpu load, after entering date and time
+    * Oliword currently causes MAME to [hang](https://github.com/mamedev/mame/commit/c6f3b3be094ecc5cce3e27f8793cb7e814490622#commitcomment-99907776) with 100% cpu load, after entering date and time. Works in MAME < .221.
+    * Olioids (gamesi/bd) has graphics errors
     * Creating an new M20 floppy through the MAME menu causes MAME to crash
     * Is printer support possible?
     * What is missing for the "Command+S" boottime easteregg?
@@ -231,7 +232,6 @@ To work with any given system language one would need access to the emulated key
 
 - [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable)
 - [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German
-- [ ] Oliword only runs with older mame (e.g. 0.212)
 - [ ] Create "official" m20 images (en/it) for "Two Days to Race", possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
 
