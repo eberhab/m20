@@ -14,7 +14,7 @@ Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0V
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471750 | e6c9874b |
+|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471577 | 5cd84e00 |
 |Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
