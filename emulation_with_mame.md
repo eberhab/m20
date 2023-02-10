@@ -229,9 +229,9 @@ To work with any given system language one would need access to the emulated key
 * Issues at the time of writing (possibly data related):
     * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img.
     * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Broken.
-    * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics.
+    * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics. Possibly the emulated machine needs a German [keyboard](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20_kbd.cpp)?
 
-- [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable)
+- [ ] Find out how to switch keyboard language in PCOS1 (multiplan_de contains an init.bas for this, but the file is not readable).
 - [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German
 - [ ] Create "official" m20 images (en/it) for "Two Days to Race", possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
