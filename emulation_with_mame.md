@@ -4,7 +4,7 @@
 
 --> Proposed update for [M20-Mame on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc) <--
 
-Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, almost like on the original machine [^1]. This article is based on MAME v0.251 on Linux Mint 21 (Jan 11th 2023).
+Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, almost like on the original machine [^1]. This article is based on MAME v0.252 on Linux Mint 21 (Feb 2023).
 
 <p align="center">
   <img src="article_media/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
@@ -30,9 +30,9 @@ To get started right away, download ROM data and floppy images into a local dire
 This puts the floppy image into the virtual M20s right floppy drive (drive 0). Non-PCOS images can additionally be added to the left floppy drive (drive 1) via the "-flop2" argument.
 
 Depending on the ROM file, the following M20 bios versions are supported:
-* 1.0 (-bios m20) (default)
-* 2.0d (-bios m20-20d)
-* 2.0f (-bios m20-20f)
+* 1.0  (`-bios m20`) (default)
+* 2.0d (`-bios m20-20d`)
+* 2.0f (`-bios m20-20f`)
 
 Note that some images might need more RAM to work and thus need the additional `ramsize` argument, while others (e.g. PCOS1) prefer the default setting of 160 k. M20 specific command line arguments can be explored [here](https://arcade.vastheman.com/minimaws/machine/m20), while a complete list of general MAME related arguments can be found [here](https://docs.mamedev.org/commandline/commandline-all.html).
 
@@ -136,21 +136,23 @@ MAME seems to be way more forgiving concerning the FM track than the original ma
 
 The latest version of MAME is the github [master branch](https://github.com/mamedev/mame). On Linux just type "make" in the checked out tree. To compile floptool etc. as well, add the "tools" argument. Compiling only the M20 driver is significantly faster and can be done by adding the "subtarget" and "sources" arguments:
 
+    $ git clone https://github.com/mamedev/mame.git && cd mame
     $ make -j8 TOOLS=1 SUBTARGET=m20 SOURCES=olivetti/m20.cpp
-    
-In order to compile a specific MAME (e.g. v0.212) version we might need to use a different python version:
+
+In order to compile a specific MAME (e.g. v0.212) version we might need to use a different python/ compiler version, e.g.:
 
     $ git clone -b mame0212 --depth 1 https://github.com/mamedev/mame.git mame0212 && cd mame0212
-    $ python3.8 -m venv venv38 && source venv38/bin/activate
-    $ make -j8 SUBTARGET=m20 SOURCES=src/mame/drivers/m20.cpp
-    
-In case it does not work, another option is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they also run well with wine on Linux.
+    $ sed -i 's/\$1\$(_args)/\$1 \$(_args)/g' 3rdparty/genie/src/host/scripts.c # Only for v<.220
+    $ PYTHON_EXECUTABLE=python3.8 OVERRIDE_CC=gcc-9 OVERRIDE_CXX=g++-9 NOWERROR=1 \
+      make -j8 SUBTARGET=m20 SOURCES=src/mame/drivers/m20.cpp 
+
+Some versions < .220 might need this [bug](https://github.com/mamedev/mame/issues/6248) fixed. More compile options can be found [here](https://docs.mamedev.org/initialsetup/compilingmame.html). In case it all does not work, another method to run previous MAME versions is to use [pre-built binaries](https://www.mamedev.org/oldrel.html). They only exist for Windows, but they do run well with `wine` on Linux.
 
 ### Run MSDOS and CP/M on the M20
 
 On a real M20, with the 8086 addon board, you can boot an Olivetti-[MS-Dos 2.0](https://en.wikipedia.org/wiki/MS-DOS#MS-DOS_2.x). This also works with MAME, by selecting bios >=1 and the _msdos.img_ floppy image from the disk images section.
 
-    $ mame m20 -bios <1, 2> -rompath . -flop1 msdos.img [-flop2 adm5.imd]
+    $ mame m20 -bios <1, 2> -rp . -flop1 msdos.img [-flop2 adm5.imd]
 
 When asked if you want to boot the alternative CPU (8086), press "y" ("z") to boot into Dos. The keyboard layout can then be changed with the _setlang_ command, e.g.: `A> setlang german`
 Keep in mind, that _msdos.img_ as well as the _adm5*.img_ are MSDOS images of MAME image type "pc". So e.g. _adm5.imd_ can be converted to a writable sector image using:
@@ -159,7 +161,7 @@ Keep in mind, that _msdos.img_ as well as the _adm5*.img_ are MSDOS images of MA
     
 In order to boot [CP/M](https://en.wikipedia.org/wiki/CP/M) on the M20, I had to adjust the ramsize, otherwise CP/M boots into a black screen:
 
-    $ mame m20 -rompath . -ramsize 512k -flop1 cpm8k.img
+    $ mame m20 -rp . -ramsize 512k -flop1 cpm8k.img
 
 ### Connecting to the M20 serial interface
 
