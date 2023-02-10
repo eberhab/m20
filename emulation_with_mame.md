@@ -14,7 +14,7 @@ Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0V
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471577 | 5cd84e00 |
+|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471765 | 9e3520df |
 |Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
@@ -221,8 +221,7 @@ To work with any given system language one would need access to the emulated key
     * Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
 
 * Issues/ questions at the time of writing (possibly MAME related):
-    * Oliword currently causes MAME to [hang](https://github.com/mamedev/mame/commit/c6f3b3be094ecc5cce3e27f8793cb7e814490622#commitcomment-99907776) with 100% cpu load, after entering date and time. Works in MAME < .221.
-    * Olioids (gamesi/bd) has graphics errors
+    * Olioids (gamesi/bd) has graphics issues. Issues differ between e.g. v.212 and v.252
     * Creating an new M20 floppy through the MAME menu causes MAME to crash
     * Is printer support possible?
     * What is missing for the "Command+S" boottime easteregg?
