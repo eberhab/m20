@@ -1,4 +1,4 @@
-﻿
+
 
 ## Emulating the M20 with MAME
 
@@ -86,7 +86,7 @@ Files contained in a regular M20-img file can be accessed with [m20floppy](http:
     # SAVE "0:<filename>",A
     $ m20 <image.img> get <filename>
 
-When writing BASIC code in ASCII back to the img, one has to make sure, that the newline delimiter is a single "CR". Linux' "LF" and Windows' "CRLF" would need ro be replaced with e.g. _sed_ or _tr_.
+When writing BASIC code in ASCII back to the img, one has to make sure, that the newline delimiter is a single "CR". Linux' "LF" and Windows' "CRLF" would need to be replaced with e.g. _sed_ or _tr_.
 
 ### The anatomy of M20 floppies and MAME images
 
@@ -130,7 +130,7 @@ Two examples showing different padding types, broken down into 16 pairs of 128 b
     D0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  - pcos20f.img
     D1 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01  - pcos20h.img (Converted by MAME from *.imd)
 
-MAME seems to be way more forgiving concerning the FM track than the original machine. When writing the images back to floppy one has to be more careful. Ideally the origial FM track should be used, if it is not available one should try to use one from a matching PCOS version. (E.g. the german games/ demo disk does not boot on the original machine with the restored FM track from pcos102, but it does so with an FM track from another pcos20h from e.g. one of the oliword images).
+MAME seems to be way more forgiving concerning the FM track than the original machine. When writing the images back to floppy one has to be more careful. Ideally the original FM track should be used, if it is not available one should try to use one from a matching PCOS version. (E.g. the german games/ demo disk does not boot on the original machine with the restored FM track from pcos102, but it does so with an FM track from another pcos20h from e.g. one of the oliword images).
 
 ### Compiling MAME from source and running older versions
 
