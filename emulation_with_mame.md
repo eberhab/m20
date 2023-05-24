@@ -221,7 +221,6 @@ To work with any given system language one would need access to the emulated key
     * Input from telnet to the M20 works, terminal output from the M20 to telnet did not work. Wrong options?
 
 * Issues/ questions at the time of writing (possibly MAME related):
-    * Olioids (gamesi/bd) has graphics issues. Issues differ between e.g. v.212 and v.252
     * Creating an new M20 floppy through the MAME menu causes MAME to crash
     * Is printer support possible?
     * What is missing for the "Command+S" boottime easteregg?
