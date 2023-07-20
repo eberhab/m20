@@ -226,7 +226,7 @@ To work with any given system language one would need access to the emulated key
     * What is missing for the "Command+S" boottime easteregg?
 
 * Issues at the time of writing (possibly data related):
-    * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img.
+    * pcos11d.img/ pcos13.img: "Error 53 in files [font.all, kb.all]". The files can be replaced from e.g. pcos-1.3.img. An old (2012) e-mail conversation mentions these disks to be bootable on the original M20, this would need to be checked and hence could still be a MAME issue.
     * adm51.imd: It seems that this DOS image has been imaged by accidentally skipping track0. Broken.
     * startrek_de.img: Based on Italian pcos102, German characters not displayed correctly. Moving the game to a German pcos20 disk solves this, but results in graphics errors and misalignment between text and graphics. Possibly the emulated machine needs a German [keyboard](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20_kbd.cpp)?
 

@@ -99,7 +99,7 @@ For writing a 280 kiB image back to floppy, one has to reverse the procedure and
     dd if=floppy.img of=floppy_unpadded.img bs=2048 count=1
     dd if=floppy.img of=floppy_unpadded.img bs=2048 skip=2 seek=1
 
-The the image can be written with a single command, based on the mixed floppy composition defined in the config:
+Then the image can be written with a single command, based on the mixed floppy composition defined in the config:
     
     gw write --diskdefs diskdefs.cfg --format="olivetti.m20" floppy_unpadded.img
     
@@ -149,9 +149,14 @@ Now `program.bas` can be edited and written back to the image:
     
 Then write the image back to floppy or run with [MAME](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc).
 
-## Questions and TODOs
+## Using floppy images directly on the M20
 
-- [ ] Can the original M20 use a [Gotek with FlashFloppy](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/)?
+An alternative to reading original floppies with a USB controller, would be to use a modern drive emulator directly on the M20. One option, the counterpart to the Greaseweazle if you will, would be the [Gotek floppy driver emulator](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/) with [FlashFloppy firmware](https://github.com/keirf/flashfloppy). This setup would enable the M20 to use *img floppy images directly from a usb stick. 
 
+According to [this post](https://forum.vcfed.org/index.php?threads/olivetti-m20-software-development.1240774/post-1295980) it should be possible to connect the Gotek directly, with only a small modification of the power connector. 
+
+The Flashfloppy firmware does not yet seem to support track padding. For use with Flashfloppy, images have either to be created without the padding (see above), or the padding be removed from the image file. A suitable script for image file conversion and Flashfloppy config for M20 image files can be found in [this post](https://forum.vcfed.org/index.php?threads/olivetti-m20-software-development.1240774/post-1287750).
+
+This could be an alternative route, if the movable components in the floppy drive have degraded and [repairing it](http://www.z80ne.com/m20/index.php?argument=sections/repair/drives/drives.inc) is not possible.
 
 
