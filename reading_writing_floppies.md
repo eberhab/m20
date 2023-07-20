@@ -19,16 +19,14 @@ Other options, using modern USB-floppy-controllers, are also able to read the FM
 #### Controller options
 
 * [Kryoflux](https://kryoflux.com/):
-
-  * Can not write *.img files back to floppy directly (need to convert to raw flux files first with e.g. the [HxC Floppy Emulator](https://hxc2001.com/download/floppy_drive_emulator/)).
-  * Mainly made for reading floppies, writing floppies is possible, but considered a "bonus" and is not officially supported (e.g. if one needs help in the support forums)
-  * Reading M20 floppies works and is described e.g. [here](https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/).
+    - Can not write *.img files back to floppy directly (need to convert to raw flux files first with e.g. the [HxC Floppy Emulator](https://hxc2001.com/download/floppy_drive_emulator/)).
+    - Mainly made for reading floppies, writing floppies is possible, but considered a "bonus" and is not officially supported (e.g. if one needs help in the support forums)
+    - Reading M20 floppies works and is described e.g. [here](https://jandelgado.github.io/blog/posts/olivetti-m20-disk-preservation/).
 
 * [Greaseweazel v4](https://github.com/keirf/Greaseweazle/wiki):
-
-  * Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) IMG and [IMD](https://github.com/keirf/greaseweazle/issues/276) files.
-  * Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to sector formats (since v1.6).
-  * Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in IMG files ([since v1.8](https://github.com/keirf/greaseweazle/releases/tag/v1.8)), to be compatible with the file size of the original pc-controller approach.
+    - Can [read and write](https://github.com/keirf/greaseweazle/wiki/Supported-Image-Types) IMG and [IMD](https://github.com/keirf/greaseweazle/issues/276) files.
+    - Can read and write [mixed](https://github.com/keirf/greaseweazle/issues/143) FM/MFM floppies to sector formats (since v1.6).
+    - Supports [FM data padding](https://github.com/keirf/greaseweazle/issues/275) in IMG files ([since v1.8](https://github.com/keirf/greaseweazle/releases/tag/v1.8)), to be compatible with the file size of the original pc-controller approach.
 
 ### Greaseweazel setup
 

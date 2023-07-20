@@ -10,12 +10,12 @@ Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.o
   <img src="article_media/clock.png" alt="M20 clock from the German demo floppy" width="700px"/>
 </p>
 
-Data [provided](https://www.dropbox.com/sh/itlibgogokhrsk2/AAAswZUc-3OZbjdt1CL0Vok8a?dl=0) with this article:
+Data provided with this article:
 
 | Description | File | Size | CRC |
 |:--|:--|--:|--:|
-|Olivetti M20 - MAME Floppy-set | m20_roms.zip | 5471765 | 9e3520df |
-|Olivetti M20 - Source code of all BAS games | m20_code.zip | 216192 | d19ddad2 |
+|Olivetti M20 - MAME Floppy-set | [m20_roms.zip](sections/tech/m20_roms.zip) | 5471765 | 9e3520df |
+|Olivetti M20 - Source code of all BAS games | [m20_code.zip](sections/tech/m20_code.zip) | 216192 | d19ddad2 |
 
 ### Running M20 floppy images
 
@@ -130,7 +130,7 @@ Two examples showing different padding types, broken down into 16 pairs of 128 b
     D0 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  - pcos20f.img
     D1 01 01 01 01 01 01 01 01 01 01 01 01 01 01 01  - pcos20h.img (Converted by MAME from *.imd)
 
-MAME seems to be way more forgiving concerning the FM track than the original machine. When writing the images back to floppy one has to be more careful. Ideally the original FM track should be used, if it is not available one should try to use one from a matching PCOS version. (E.g. the german games/ demo disk does not boot on the original machine with the restored FM track from pcos102, but it does so with an FM track from another pcos20h from e.g. one of the oliword images).
+Bios 1 seems to be more forgiving concerning booting different FM tracks than Bios versions 2. When writing the images back to floppy to be used in a real machine with fixed Bios, one has to be more careful. Ideally the original FM track should be used, if it is not available one should try to use one from a matching PCOS version. (E.g. the german games/ demo disk does not boot on the original machine with the restored FM track from pcos102, but it does so with an FM track from another pcos20h from e.g. one of the oliword images).
 
 ### Compiling MAME from source and running older versions
 
@@ -214,7 +214,7 @@ The following will boot pcos, switch to BASIC mode and draw a circle:
 
 To work with any given system language one would need access to the emulated keyboard. This is not currently possible via _autoboot_ and seems to be a current limitation of MAME.
 
-### Notes, known issues, open questions, TODOs
+### Notes, known issues, open questions
 
 * Open questions:
     * How to change the language/ keyboard under pcos1? 
@@ -234,6 +234,8 @@ To work with any given system language one would need access to the emulated key
 - [ ] Images on z80ne: add pcos20h.img, oliword_de.img.bz2 is actually English not German
 - [ ] Create "official" m20 images (en/it) for "Two Days to Race", possible?
 - [ ] Remove tech/mfi_images/pcos20_german.zip and games_german.zip MFIs from previous article version
+
+### TODOs
 
 [^1]: https://forums.bannister.org/ubbthreads.php?ubb=showflat&Number=78739
 [^2]: http://www.z80ne.com/m20/sections/manuals/m20qreff.pdf
