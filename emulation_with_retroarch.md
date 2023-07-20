@@ -1,7 +1,7 @@
 ﻿
 # Emulating the M20 with RetroArch
 
-Version: 11 Jan 2023
+--> Working copy of [M20-Retroarch on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/emulation/mame_retroarch.inc) <--
 
 This guide highlights the particularities of running the M20 MAME driver on RetroArch with the examples of setting it up on Android and Retropie. For a general overview of running the M20 with MAME itself refer to the [M20 emulation with MAME article](http://www.z80ne.com/m20/index.php?argument=sections/tech/mame_m20.inc).
 

@@ -1,7 +1,9 @@
 ﻿
 ## Reading M20 floppies with modern controllers
 
-Version: 6 Feb 2023. Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
+--> Working copy of [M20-USB-Floppy on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/transfer/floppy/transfer_floppies.inc) <--
+
+Text based on Greaseweazel 1.8, a Teac FD-55BR drive and Mame v.251, all running on Ubuntu 22.10.
 
 <p align="center">
   <img src="article_media/floppy.jpg" alt="An original PCOS 2.0 floppy from 1983" width="700px"/>

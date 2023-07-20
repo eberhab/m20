@@ -2,7 +2,7 @@
 
 ## Emulating the M20 with MAME
 
---> Proposed update for [M20-Mame on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/emulation/mame_m20.inc) <--
+--> Working copy of [M20-Mame on z80ne/m20](http://www.z80ne.com/m20/index.php?argument=sections/emulation/mame_m20.inc) <--
 
 Since a while, the Multiple Arcade Machine Emulator [MAME](https://www.mamedev.org/) has a [driver](https://github.com/mamedev/mame/blob/master/src/mame/olivetti/m20.cpp) for the Olivetti L1 M20, enabling MAME to run M20 floppy images, boot PCOS and execute programs, almost like on the original machine [^1]. This article is based on MAME v0.252 on Linux Mint 21 (Feb 2023).
 
