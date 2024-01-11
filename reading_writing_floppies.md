@@ -157,7 +157,25 @@ An alternative to reading original floppies with a USB controller, would be to u
 
 According to [this post](https://forum.vcfed.org/index.php?threads/olivetti-m20-software-development.1240774/post-1295980) it should be possible to connect the Gotek directly, with only a small modification of the power connector. 
 
-The Flashfloppy firmware does not yet seem to support track padding. For use with Flashfloppy, images have either to be created without the padding (see above), or the padding be removed from the image file. A suitable script for image file conversion and Flashfloppy config for M20 image files can be found in [this post](https://forum.vcfed.org/index.php?threads/olivetti-m20-software-development.1240774/post-1287750).
+The Flashfloppy Gotek firmware also supports track padding as "img_bps" since v3.39. The following config can be used to directly load MAME images:
+
+    [::286720]
+    file-layout = interleaved
+    cyls = 35
+    heads = 2
+    interleave = 1
+    secs = 16
+    id=1
+    tracks = 0.0 ## Boot cylinder, head 0
+    bps = 128 ## Cylinder 0, head 0 has 128-byte sectors
+    mode = fm
+    img_bps = 256
+    tracks = 0.1 ## Boot cylinder, head 1
+    bps = 256 ## Cylinder 0, head 1 has 256-byte sectors
+    mode = mfm
+    tracks = 1-34 ## All other cylinders
+    bps = 256
+    mode = mfm
 
 This could be an alternative route, if the movable components in the floppy drive have degraded and [repairing it](http://www.z80ne.com/m20/index.php?argument=sections/repair/drives/drives.inc) is not possible.
 
