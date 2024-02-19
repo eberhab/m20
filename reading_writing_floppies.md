@@ -155,7 +155,7 @@ Then write the image back to floppy or run with [MAME](http://www.z80ne.com/m20/
 
 An alternative to reading original floppies with a USB controller, would be to use a modern drive emulator directly on the M20. One option, the counterpart to the Greaseweazle if you will, would be the [Gotek floppy driver emulator](https://amigastore.eu/en/403-usb-floppy-emulator-gotek-black-version.html#/) with [FlashFloppy firmware](https://github.com/keirf/flashfloppy). This setup would enable the M20 to use *img floppy images directly from a usb stick. 
 
-According to [this post](https://forum.vcfed.org/index.php?threads/olivetti-m20-software-development.1240774/post-1295980) it should be possible to connect the Gotek directly, with only a small modification of the power connector. 
+In order the connect the Gotek (or any other 320k PC drive), one has to make sure to disconnect the additional 12V power line from the M20. The M20 power connectors serve (5V, G, 12V, 12V) while the PC connectors expect (5V, G, G, 12V). So the additional 12V line needs to be removed. Avoid using the twist in the floppy cable for drive numbering, it does not seem to work on the M20, so both drives have to be connected to the un-twisted part of the data cable. Like the original M20 drives, also the Goteks have jumpers to define the drive number. In order to number the drives, these jumpers should be used. 
 
 The Flashfloppy Gotek firmware also supports track padding as "img_bps" since v3.39. The following config can be used to directly load MAME images:
 
@@ -167,15 +167,15 @@ The Flashfloppy Gotek firmware also supports track padding as "img_bps" since v3
     secs = 16
     id=1
     tracks = 0.0 ## Boot cylinder, head 0
-    bps = 128 ## Cylinder 0, head 0 has 128-byte sectors
-    mode = fm
-    img_bps = 256
+        bps = 128 ## Cylinder 0, head 0 has 128-byte sectors
+        mode = fm
+        img_bps = 256
     tracks = 0.1 ## Boot cylinder, head 1
-    bps = 256 ## Cylinder 0, head 1 has 256-byte sectors
-    mode = mfm
+        bps = 256 ## Cylinder 0, head 1 has 256-byte sectors
+        mode = mfm
     tracks = 1-34 ## All other cylinders
-    bps = 256
-    mode = mfm
+        bps = 256
+        mode = mfm
 
 This could be an alternative route, if the movable components in the floppy drive have degraded and [repairing it](http://www.z80ne.com/m20/index.php?argument=sections/repair/drives/drives.inc) is not possible.
 
